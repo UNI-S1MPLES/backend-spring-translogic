@@ -19,7 +19,7 @@ public class TranslogicApplication {
 	}
 
 	@Bean
-	public CommandLineRunner mappingDemo(DriverRepository driverRepository, TravelRepository travelRepository ) {
+	public CommandLineRunner mappingDemo(DriverRepository driverRepository, TravelRepository travelRepository) {
 		return args -> {
 			Date dateOfBirth1 = new Date(104, 5, 22);
 			Date dateOfJoin1 = new Date(121, 2, 1);

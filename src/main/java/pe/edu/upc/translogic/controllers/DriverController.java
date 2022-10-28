@@ -21,7 +21,7 @@ public class DriverController {
     @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers() {
         List<Driver> drivers = driverRepository.findAll();
-        for (Driver o: drivers) {
+        for (Driver o : drivers) {
             o.setTravels(null);
         }
         return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
