@@ -25,8 +25,8 @@ public class TranslogicApplication {
 			Date dateOfJoin1 = new Date(121, 2, 1);
 			Date dateOfBirth2 = new Date(101, 8, 2);
 			Date dateOfJoin2 = new Date(118, 2, 1);
-			Driver driver1 = new Driver("Brian Kaoru", "Uceda Hirata", "Male", dateOfJoin1, dateOfBirth1, "Active");
-			Driver driver2 = new Driver("Jorge Shoji", "Uceda Hirata", "Male", dateOfJoin2, dateOfBirth2, "Inactive");
+			Driver driver1 = new Driver("Brian Kaoru", "Uceda Hirata", dateOfJoin1, dateOfBirth1, "Active");
+			Driver driver2 = new Driver("Jorge Shoji", "Uceda Hirata", dateOfJoin2, dateOfBirth2, "Inactive");
 			driverRepository.save(driver1);
 			driverRepository.save(driver2);
 

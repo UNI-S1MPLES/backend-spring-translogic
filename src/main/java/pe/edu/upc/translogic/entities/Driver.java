@@ -19,7 +19,6 @@ public class Driver {
 
     private String names;
     private String surnames;
-    private String gender;
     private Date dateOfJoin;
     private Date dateOfBrith;
 
@@ -28,12 +27,12 @@ public class Driver {
 
     private String state;
 
-    public Driver(String names, String surnames, String gender, Date dateOfJoin, Date dateOfBrith, String state) {
+    public Driver(String names, String surnames, Date dateOfJoin, Date dateOfBrith, String state) {
         this.names = names;
         this.surnames = surnames;
-        this.gender = gender;
         this.dateOfJoin = dateOfJoin;
         this.dateOfBrith = dateOfBrith;
         this.state = state;
     }
+
 }

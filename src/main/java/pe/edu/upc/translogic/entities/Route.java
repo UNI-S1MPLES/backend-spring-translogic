@@ -8,14 +8,17 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tramos")
+@Table(name = "routes")
 
 @NoArgsConstructor
-public class Tramo {
+public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String startPlace;
     private String endPlace;
+
+    @OneToOne(mappedBy = "route")
+    private Travel travel;
+
 }

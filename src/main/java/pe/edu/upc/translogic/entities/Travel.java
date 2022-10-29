@@ -17,13 +17,29 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "id_driver")
+    private Driver driver;
+
+    @ManyToMany(mappedBy = "travels")
+    private List<Vehicle> vehicles;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name="id_route")
+    private Route route;
+
     private String originOfTravel;
     private String endOfTravel;
     private Date dateOfStart;
+    private Date dateOfEnd;
+    private int duration;
+    private String state;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id")
-    private Driver driver;
+    @JoinColumn(name = "id_administrator")
+    private Administrator administrator;
+
+
 
     public Travel(String originOfTravel, String endOfTravel, Date dateOfStart, Driver driver) {
         this.originOfTravel = originOfTravel;
