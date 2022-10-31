@@ -9,10 +9,10 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "routes")
+@Table(name = "groups")
 
 @NoArgsConstructor
-public class Route {
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,17 +21,12 @@ public class Route {
     @JoinColumn(name = "administrator_id")
     private Administrator administrator;
 
-    @OneToMany(mappedBy = "route")
-    private List<Travel> travels;
+    @OneToMany(mappedBy = "group")
+    private List<Driver> drivers;
 
-    @OneToMany(mappedBy = "route")
-    private List<Tramo> tramos;
+    private String sector;
 
-    private String startPlace;
-    private String endPlace;
-
-    public Route(String startPlace, String endPlace) {
-        this.startPlace = startPlace;
-        this.endPlace = endPlace;
+    public Group(String sector) {
+        this.sector = sector;
     }
 }

@@ -17,28 +17,31 @@ public class Administrator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String surname;
-    private String mail;
-    private String phone;
-    private String username;
-    private String password;
-    private String listTravel;
+    @OneToMany(mappedBy = "administrator")
+    private List<Group> groups;
+
+    @OneToMany(mappedBy = "administrator")
+    private List<Driver> drivers;
 
     @OneToMany(mappedBy = "administrator")
     private List<Travel> travels;
 
-    private String state;
+    @OneToMany(mappedBy = "administrator")
+    private List<Route> routes;
 
-    public Administrator(String names, String surnames, String mails, String phones, String usernames, String passwords,
-            String listTravels) {
-        this.name = names;
-        this.surname = surnames;
-        this.mail = mails;
-        this.phone = phones;
-        this.username = usernames;
-        this.password = passwords;
-        this.listTravel = listTravels;
+    private String name;
+    private String surname;
+    private String mail;
+    private Integer phone;
+    private String username;
+    private String password;
 
+    public Administrator(String name, String surname, String mail, Integer phone, String username, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.mail = mail;
+        this.phone = phone;
+        this.username = username;
+        this.password = password;
     }
 }

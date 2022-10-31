@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -17,34 +16,32 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id_driver")
+    @JoinColumn(name = "administrator_id")
+    private Administrator administrator;
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @ManyToMany(mappedBy = "travels")
-    private List<Vehicle> vehicles;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-    @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name="id_route")
+    @ManyToOne
+    @JoinColumn(name = "route_id")
     private Route route;
 
-    private String originOfTravel;
-    private String endOfTravel;
     private Date dateOfStart;
     private Date dateOfEnd;
     private int duration;
     private String state;
 
-    @ManyToOne
-    @JoinColumn(name = "id_administrator")
-    private Administrator administrator;
-
-
-
-    public Travel(String originOfTravel, String endOfTravel, Date dateOfStart, Driver driver) {
-        this.originOfTravel = originOfTravel;
-        this.endOfTravel = endOfTravel;
+    public Travel(Date dateOfStart, Date dateOfEnd, int duration, String state) {
         this.dateOfStart = dateOfStart;
-        this.driver = driver;
+        this.dateOfEnd = dateOfEnd;
+        this.duration = duration;
+        this.state = state;
     }
 }

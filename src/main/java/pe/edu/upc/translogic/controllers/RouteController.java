@@ -26,20 +26,22 @@ import pe.edu.upc.translogic.repositories.TramoRepository;
 
 @RestController
 @RequestMapping("/api")
-public class TramoController {
+public class RouteController {
     @Autowired
-    private TramoRepository tramoRepository;
+    private RouteRepository routeRepository;
 
-    // Only Tramo
-    @GetMapping("/tramos")
-    public ResponseEntity<List<Tramo>> getAllTramos() {
+    // Only Routes
+    @GetMapping("/routes")
+    public ResponseEntity<List<Route>> getAllRoutes() {
 
-        List<Tramo> listTramos = tramoRepository.findAll();
+        List<Route> listRoutes = routeRepository.findAll();
 
-        for (Tramo item : listTramos) {
-            item.setRoute(null);
+        for (Route item : listRoutes) {
+            item.setAdministrator(null);
+            item.setTravels(null);
+            item.setTramos(null);
         }
-        return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
-    }
 
+        return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
+    }
 }

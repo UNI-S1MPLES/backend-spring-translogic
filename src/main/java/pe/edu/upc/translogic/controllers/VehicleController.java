@@ -26,20 +26,32 @@ import pe.edu.upc.translogic.repositories.TramoRepository;
 
 @RestController
 @RequestMapping("/api")
-public class TramoController {
+public class VehicleController {
     @Autowired
-    private TramoRepository tramoRepository;
+    private VehicleRepository vehicleRepository;
 
-    // Only Tramo
-    @GetMapping("/tramos")
-    public ResponseEntity<List<Tramo>> getAllTramos() {
+    // Only Vehicles
+    @GetMapping("/vehicles")
+    public ResponseEntity<List<Vehicle>> getAllVehicles() {
 
-        List<Tramo> listTramos = tramoRepository.findAll();
+        List<Vehicle> listVehicles = vehicleRepository.findAll();
 
-        for (Tramo item : listTramos) {
-            item.setRoute(null);
+        for (Vehicle item : listVehicles) {
+            item.setTravels(null);
         }
-        return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
+        return new ResponseEntity<List<Vehicle>>(listVehicles, HttpStatus.OK);
     }
 
+    // // vehicles y travels
+    // @GetMapping("/vehicles-travels")
+    // public ResponseEntity<List<Vehicle>> getAllVehiclesAndTravels() {
+
+    // List<Vehicle> vehicles = vehicleRepository.findAll();
+    // for (Vehicle v : vehicles) {
+    // for (Travel t : v.getTravels()) {
+    // t.setVehicles(null);
+    // }
+    // }
+    // return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+    // }
 }
