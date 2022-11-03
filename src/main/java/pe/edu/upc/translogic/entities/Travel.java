@@ -16,6 +16,11 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Date dateOfStart;
+    private Date dateOfEnd;
+    private int duration;
+    private String state;
+
     // @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "administrator_id")
@@ -26,17 +31,12 @@ public class Travel {
     private Driver driver;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id")
-    private Vehicle vehicle;
-
-    @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
 
-    private Date dateOfStart;
-    private Date dateOfEnd;
-    private int duration;
-    private String state;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
     public Travel(Date dateOfStart, Date dateOfEnd, int duration, String state) {
         this.dateOfStart = dateOfStart;

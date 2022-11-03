@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -30,20 +30,44 @@ public class GroupController {
     @Autowired
     private GroupRepository groupRepository;
 
-    // Only Group
+    // Mostrar toda la
     @GetMapping("/groups")
-    public ResponseEntity<List<Group>> getAllGroups() {
+    public ResponseEntity<List<Group>> getAllGroupsInfo() {
 
-        List<Group> listGroups = groupRepository.findAll();
+        List<Group> groups = groupRepository.findAll();
 
-        if (listGroups.isEmpty()) {
+        if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Group item : listGroups) {
+        for (Group group : groups) {
+
+            group.getAdministrator().setGroups(null);
+            group.getAdministrator().setDrivers(null);
+            group.getAdministrator().setTravels(null);
+            group.getAdministrator().setRoutes(null);
+
+            for (Driver driver : group.getDrivers()) {
+                driver.setAdministrator(null);
+                driver.setGroup(null);
+                driver.setTravels(null);
+            }
+        }
+        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+    }
+
+    // Only Group
+    @GetMapping("/groups/info")
+    public ResponseEntity<List<Group>> getAllGroups() {
+
+        List<Group> groups = groupRepository.findAll();
+
+        if (groups.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Group item : groups) {
             item.setAdministrator(null);
             item.setDrivers(null);
         }
-        return new ResponseEntity<List<Group>>(listGroups, HttpStatus.OK);
+        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
-
 }

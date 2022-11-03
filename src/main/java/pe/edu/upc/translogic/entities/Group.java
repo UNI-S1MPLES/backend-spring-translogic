@@ -17,14 +17,14 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String sector;
+
     @ManyToOne
     @JoinColumn(name = "administrator_id")
     private Administrator administrator;
 
     @OneToMany(mappedBy = "group")
     private List<Driver> drivers;
-
-    private String sector;
 
     public Group(String sector) {
         this.sector = sector;

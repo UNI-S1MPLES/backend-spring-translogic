@@ -17,11 +17,11 @@ public class Tramo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
-
-    private String description;
 
     public Tramo(String description) {
         this.description = description;

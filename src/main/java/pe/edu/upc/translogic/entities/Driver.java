@@ -18,6 +18,12 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String names;
+    private String surnames;
+    private Date dateOfJoin;
+    private Date dateOfBirthday;
+    private String state;
+
     @ManyToOne
     @JoinColumn(name = "administrator_id")
     private Administrator administrator;
@@ -29,17 +35,11 @@ public class Driver {
     @OneToMany(mappedBy = "driver")
     private List<Travel> travels;
 
-    private String names;
-    private String surnames;
-    private Date dateOfJoin;
-    private Date dateOfBrith;
-    private String state;
-
-    public Driver(String names, String surnames, Date dateOfJoin, Date dateOfBrith, String state) {
+    public Driver(String names, String surnames, Date dateOfJoin, Date dateOfBirthday, String state) {
         this.names = names;
         this.surnames = surnames;
         this.dateOfJoin = dateOfJoin;
-        this.dateOfBrith = dateOfBrith;
+        this.dateOfBirthday = dateOfBirthday;
         this.state = state;
     }
 }

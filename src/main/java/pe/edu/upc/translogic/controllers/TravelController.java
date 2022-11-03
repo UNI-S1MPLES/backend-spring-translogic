@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -24,54 +24,60 @@ import pe.edu.upc.translogic.repositories.RouteRepository;
 import pe.edu.upc.translogic.repositories.VehicleRepository;
 import pe.edu.upc.translogic.repositories.TramoRepository;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class TravelController {
     @Autowired
     private TravelRepository travelRepository;
 
-    // Only Travels
+    // Travels - All Information
     @GetMapping("/travels")
     public ResponseEntity<List<Travel>> getAllTravels() {
+        List<Travel> travels = travelRepository.findAll();
 
-        List<Travel> listTravels = travelRepository.findAll();
+        if (travels.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Travel item : travels) {
+            // Administrator
+            item.getAdministrator().setGroups(null);
+            item.getAdministrator().setDrivers(null);
+            item.getAdministrator().setTravels(null);
+            item.getAdministrator().setRoutes(null);
 
-        for (Travel item : listTravels) {
+            // DRIVER && GROUP
+            item.getDriver().setAdministrator(null);
+            item.getDriver().getGroup().setAdministrator(null);
+            item.getDriver().getGroup().setDrivers(null);
+            item.getDriver().setTravels(null);
+            // Route
+            // item.getRoute().setAdministrator(null);
+            // item.getRoute().setTravels(null);
+            // item.getRoute().setTramos(null);
+            // for (Tramo tramo : item.getRoute().getTramos())
+            // tramo.setRoute(null);
+            // Vehicle
+            // item.getVehicle().setTravels(null);
+        }
+
+        return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
+    }
+
+    // Travels - Individual Information
+    @GetMapping("/travels/info")
+    public ResponseEntity<List<Travel>> getAllTravelsInfo() {
+        List<Travel> travels = travelRepository.findAll();
+
+        if (travels.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Travel item : travels) {
             item.setAdministrator(null);
             item.setDriver(null);
+            item.setRoute(null);
             item.setVehicle(null);
         }
-
-        return new ResponseEntity<List<Travel>>(listTravels, HttpStatus.OK);
+        return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
     }
-
-    // travels y drivers
-    @GetMapping("/travels-drivers")
-    public ResponseEntity<List<Travel>> getAllTravelsAndDrivers() {
-
-        List<Travel> listTravels = travelRepository.findAll();
-
-        for (Travel item : listTravels) {
-            Driver tempDriver = item.getDriver();
-            tempDriver.setTravels(null);
-            item.setDriver(tempDriver);
-        }
-
-        return new ResponseEntity<List<Travel>>(listTravels, HttpStatus.OK);
-    }
-
-    // // travels y vehicles
-    // @GetMapping("/travels-vehicles")
-    // public ResponseEntity<List<Travel>> getAllTravelsAndVehicles() {
-
-    // List<Travel> travels;
-    // travels = travelRepository.findAll();
-    // for (Travel t : travels) {
-    // for (Vehicle v : t.getVehicles()) {
-    // v.setTravels(null);
-    // }
-    // }
-
-    // return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
-    // }
 }

@@ -9,13 +9,20 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "administrator")
+@Table(name = "administrators")
 
 @NoArgsConstructor
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String names;
+    private String surnames;
+    private String email;
+    private Integer phone;
+    private String nickname;
+    private String password;
 
     @OneToMany(mappedBy = "administrator")
     private List<Group> groups;
@@ -29,19 +36,12 @@ public class Administrator {
     @OneToMany(mappedBy = "administrator")
     private List<Route> routes;
 
-    private String name;
-    private String surname;
-    private String mail;
-    private Integer phone;
-    private String username;
-    private String password;
-
-    public Administrator(String name, String surname, String mail, Integer phone, String username, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.mail = mail;
+    public Administrator(String names, String surnames, String email, Integer phone, String nickname, String password) {
+        this.names = names;
+        this.surnames = surnames;
+        this.email = email;
         this.phone = phone;
-        this.username = username;
+        this.nickname = nickname;
         this.password = password;
     }
 }

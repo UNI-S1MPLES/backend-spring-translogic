@@ -17,6 +17,9 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String startPlace;
+    private String endPlace;
+
     @ManyToOne
     @JoinColumn(name = "administrator_id")
     private Administrator administrator;
@@ -26,9 +29,6 @@ public class Route {
 
     @OneToMany(mappedBy = "route")
     private List<Tramo> tramos;
-
-    private String startPlace;
-    private String endPlace;
 
     public Route(String startPlace, String endPlace) {
         this.startPlace = startPlace;
