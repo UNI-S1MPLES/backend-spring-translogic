@@ -58,9 +58,9 @@ public class AdministratorController {
                 route.setAdministrator(null);
                 route.setTravels(null);
 
-                for (Tramo tramo : route.getTramos()) {
-                    tramo.setRoute(null);
-                }
+                // for (Tramo tramo : route.getTramos()) {
+                // tramo.setRoute(null);
+                // }
             }
         }
 
@@ -110,9 +110,9 @@ public class AdministratorController {
             route.setAdministrator(null);
             route.setTravels(null);
 
-            for (Tramo tramo : route.getTramos()) {
-                tramo.setRoute(null);
-            }
+            // for (Tramo tramo : route.getTramos()) {
+            // tramo.setRoute(null);
+            // }
         }
 
         return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
@@ -202,7 +202,7 @@ public class AdministratorController {
         for (Route item : routes) {
             item.setAdministrator(null);
             item.setTravels(null);
-            item.setTramos(null);
+            // item.setTramos(null);
         }
 
         return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);

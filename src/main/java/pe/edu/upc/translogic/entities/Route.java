@@ -28,7 +28,7 @@ public class Route {
     private List<Travel> travels;
 
     @OneToMany(mappedBy = "route")
-    private List<Tramo> tramos;
+    private List<RouteTramo> routeTramos;
 
     public Route(String startPlace, String endPlace) {
         this.startPlace = startPlace;

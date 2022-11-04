@@ -37,16 +37,16 @@ public class TramoController {
 
         List<Tramo> listTramos = tramoRepository.findAll();
 
-        for (Tramo item : listTramos) {
-            item.setRoute(null);
+        // for (Tramo item : listTramos) {
+        // item.setRoute(null);
 
-            // PARA CUANDO SEA @ManyToMany
-            // for (Route route : item.getRoute()) {
-            // route.setAdministrator(null);
-            // route.setTravels(null);
-            // route.setTramos(null);
-            // }
-        }
+        // PARA CUANDO SEA @ManyToMany
+        // for (Route route : item.getRoute()) {
+        // route.setAdministrator(null);
+        // route.setTravels(null);
+        // route.setTramos(null);
+        // }
+        // }
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
 
@@ -56,9 +56,9 @@ public class TramoController {
 
         List<Tramo> listTramos = tramoRepository.findAll();
 
-        for (Tramo item : listTramos) {
-            item.setRoute(null);
-        }
+        // for (Tramo item : listTramos) {
+        // item.setRoute(null);
+        // }
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
 

@@ -13,6 +13,7 @@ import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
 import pe.edu.upc.translogic.entities.Route;
+import pe.edu.upc.translogic.entities.RouteTramo;
 import pe.edu.upc.translogic.entities.Tramo;
 import pe.edu.upc.translogic.entities.Travel;
 import pe.edu.upc.translogic.entities.Vehicle;
@@ -20,6 +21,7 @@ import pe.edu.upc.translogic.repositories.AdministratorRepository;
 import pe.edu.upc.translogic.repositories.DriverRepository;
 import pe.edu.upc.translogic.repositories.GroupRepository;
 import pe.edu.upc.translogic.repositories.RouteRepository;
+import pe.edu.upc.translogic.repositories.RouteTramoRepository;
 import pe.edu.upc.translogic.repositories.TramoRepository;
 import pe.edu.upc.translogic.repositories.TravelRepository;
 import pe.edu.upc.translogic.repositories.VehicleRepository;
@@ -34,7 +36,8 @@ public class TranslogicApplication {
 	@Bean
 	public CommandLineRunner mappingDemo(AdministratorRepository administratorRepository,
 			GroupRepository groupRepository, DriverRepository driverRepository, TravelRepository travelRepository,
-			VehicleRepository vehicleRepository, RouteRepository routeRepository, TramoRepository tramoRepository) {
+			VehicleRepository vehicleRepository, RouteRepository routeRepository, TramoRepository tramoRepository,
+			RouteTramoRepository routeTramoRepository) {
 		return args -> {
 			{
 				Date date = new Date(122, 9, 29);
@@ -57,9 +60,9 @@ public class TranslogicApplication {
 				route1.setAdministrator(admin1);
 
 				driver1.setGroup(group1);
-				tramo1.setRoute(route1);
-				tramo2.setRoute(route1);
-				tramo3.setRoute(route1);
+				// tramo1.setRoute(route1);
+				// tramo2.setRoute(route1);
+				// tramo3.setRoute(route1);
 
 				// PARA VIAJE
 
@@ -72,6 +75,10 @@ public class TranslogicApplication {
 				tramoRepository.save(tramo1);
 				tramoRepository.save(tramo2);
 				tramoRepository.save(tramo3);
+
+				routeTramoRepository.save(new RouteTramo(route1, tramo1));
+				routeTramoRepository.save(new RouteTramo(route1, tramo2));
+				routeTramoRepository.save(new RouteTramo(route1, tramo3));
 
 				// Administrator admin2 = new Administrator("Jesus", "Cardenas",
 				// "jesus.cardenas@gmail.com", 930348850,

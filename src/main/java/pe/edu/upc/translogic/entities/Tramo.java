@@ -19,10 +19,6 @@ public class Tramo {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "route_id")
-    private Route route;
-
     public Tramo(String description) {
         this.description = description;
     }
