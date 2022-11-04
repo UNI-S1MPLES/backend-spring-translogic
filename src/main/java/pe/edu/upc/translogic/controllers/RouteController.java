@@ -40,6 +40,23 @@ public class RouteController {
         for (Route item : listRoutes) {
             item.setAdministrator(null);
             item.setTravels(null);
+            for (Tramo tramo : item.getTramos()) {
+                tramo.setRoute(null);
+            }
+        }
+
+        return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
+    }
+
+    // Only Routes
+    @GetMapping("/routes/info")
+    public ResponseEntity<List<Route>> getAllRoutesInfo() {
+
+        List<Route> listRoutes = routeRepository.findAll();
+
+        for (Route item : listRoutes) {
+            item.setAdministrator(null);
+            item.setTravels(null);
             item.setTramos(null);
         }
 

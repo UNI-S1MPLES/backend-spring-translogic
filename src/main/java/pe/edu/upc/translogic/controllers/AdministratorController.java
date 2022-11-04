@@ -30,7 +30,6 @@ public class AdministratorController {
     @Autowired
     private AdministratorRepository administratorRepository;
 
-    // Administrators - All Information (NO SE USA)
     @GetMapping("/admins")
     public ResponseEntity<List<Administrator>> getAllAdmins() {
         List<Administrator> administrators = administratorRepository.findAll();
@@ -66,7 +65,6 @@ public class AdministratorController {
         return new ResponseEntity<List<Administrator>>(administrators, HttpStatus.OK);
     }
 
-    // Administrators - Individual Information
     @GetMapping("/admins/info")
     public ResponseEntity<List<Administrator>> getAllAdminsInfo() {
         List<Administrator> administrators = administratorRepository.findAll();
@@ -83,9 +81,56 @@ public class AdministratorController {
         return new ResponseEntity<List<Administrator>>(administrators, HttpStatus.OK);
     }
 
-    // Administrators -> Group by ID
+    @GetMapping("/admins/{id}")
+    public ResponseEntity<Administrator> getAdminById(@PathVariable("id") Long id) {
+        Administrator foundAdmin = administratorRepository.findById(id).get();
+
+        if (foundAdmin == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Group group : foundAdmin.getGroups()) {
+            group.setAdministrator(null);
+            group.setDrivers(null);
+        }
+        for (Driver driver : foundAdmin.getDrivers()) {
+            driver.setAdministrator(null);
+            driver.setGroup(null);
+            driver.setTravels(null);
+        }
+        for (Travel travel : foundAdmin.getTravels()) {
+            travel.setAdministrator(null);
+            travel.setDriver(null);
+            travel.setRoute(null);
+        }
+        for (Route route : foundAdmin.getRoutes()) {
+            route.setAdministrator(null);
+            route.setTravels(null);
+
+            for (Tramo tramo : route.getTramos()) {
+                tramo.setRoute(null);
+            }
+        }
+
+        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    }
+
+    @GetMapping("/admins/info/{id}")
+    public ResponseEntity<Administrator> getAdminInfoById(@PathVariable("id") Long id) {
+        Administrator foundAdmin = administratorRepository.findById(id).get();
+
+        if (foundAdmin == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        foundAdmin.setGroups(null);
+        foundAdmin.setDrivers(null);
+        foundAdmin.setTravels(null);
+        foundAdmin.setRoutes(null);
+
+        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    }
+
     @GetMapping("/admins/groups/{id}")
-    public ResponseEntity<List<Group>> getGroupOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Group>> getAllGroupsOfAdminById(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Group> groups = administrator.getGroups();
@@ -102,9 +147,8 @@ public class AdministratorController {
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 
-    // Administrators -> Driver by ID
     @GetMapping("/admins/drivers/{id}")
-    public ResponseEntity<List<Driver>> getDriverOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Driver>> getAllDriversOfAdminById(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Driver> drivers = administrator.getDrivers();
@@ -121,9 +165,8 @@ public class AdministratorController {
         return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
     }
 
-    // Administrators -> Travel by ID
     @GetMapping("/admins/travels/{id}")
-    public ResponseEntity<List<Travel>> getTravelOfAdminByIp(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Travel>> getAllTravelsOfAdminById(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Travel> travels = administrator.getTravels();
@@ -141,9 +184,8 @@ public class AdministratorController {
         return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
     }
 
-    // Administrators -> Route by ID
     @GetMapping("/admins/routes/{id}")
-    public ResponseEntity<List<Route>> getRouteOfAdminByIp(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Route>> getAllRoutesOfAdminById(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Route> routes = administrator.getRoutes();
@@ -160,95 +202,51 @@ public class AdministratorController {
         return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);
     }
 
-    // Administrator (All Information): Find -> Id
-    @GetMapping("/admins/id/{id}")
-    public ResponseEntity<Administrator> getAdminById(@PathVariable("id") Long id) {
-        Administrator foundAdmin = administratorRepository.findById(id).get();
+    // @GetMapping("/admins/email/{email}")
+    // public ResponseEntity<Administrator> getAdminByEmail(@PathVariable("email")
+    // String email) {
+    // Administrator foundAdmin = administratorRepository.findByEmail(email);
 
-        for (Group group : foundAdmin.getGroups()) {
-            group.setAdministrator(null);
-            group.setDrivers(null);
-        }
-        for (Driver driver : foundAdmin.getDrivers()) {
-            driver.setAdministrator(null);
-            driver.setGroup(null);
-            driver.setTravels(null);
-        }
-        for (Travel travel : foundAdmin.getTravels()) {
-            travel.setAdministrator(null);
-            travel.setDriver(null);
-            travel.setRoute(null);
-        }
-        for (Route route : foundAdmin.getRoutes()) {
-            route.setAdministrator(null);
-            route.setTravels(null);
+    // for (Group group : foundAdmin.getGroups()) {
+    // group.setAdministrator(null);
+    // group.setDrivers(null);
+    // }
+    // for (Driver driver : foundAdmin.getDrivers()) {
+    // driver.setAdministrator(null);
+    // driver.setGroup(null);
+    // driver.setTravels(null);
+    // }
+    // for (Travel travel : foundAdmin.getTravels()) {
+    // travel.setAdministrator(null);
+    // travel.setDriver(null);
+    // travel.setRoute(null);
+    // }
+    // for (Route route : foundAdmin.getRoutes()) {
+    // route.setAdministrator(null);
+    // route.setTravels(null);
 
-            for (Tramo tramo : route.getTramos()) {
-                tramo.setRoute(null);
-            }
-        }
+    // for (Tramo tramo : route.getTramos()) {
+    // tramo.setRoute(null);
+    // }
+    // }
 
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    }
+    // return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    // }
 
-    // Administrator (All Information): Find -> Email
-    @GetMapping("/admins/email/{email}")
-    public ResponseEntity<Administrator> getAdminByEmail(@PathVariable("email") String email) {
-        Administrator foundAdmin = administratorRepository.findByEmail(email);
+    // @GetMapping("/admins/info/email/{email}")
+    // public ResponseEntity<Administrator>
+    // getAdminInfoByEmail(@PathVariable("email") String email) {
+    // Administrator foundAdmin = administratorRepository.findByEmail(email);
 
-        for (Group group : foundAdmin.getGroups()) {
-            group.setAdministrator(null);
-            group.setDrivers(null);
-        }
-        for (Driver driver : foundAdmin.getDrivers()) {
-            driver.setAdministrator(null);
-            driver.setGroup(null);
-            driver.setTravels(null);
-        }
-        for (Travel travel : foundAdmin.getTravels()) {
-            travel.setAdministrator(null);
-            travel.setDriver(null);
-            travel.setRoute(null);
-        }
-        for (Route route : foundAdmin.getRoutes()) {
-            route.setAdministrator(null);
-            route.setTravels(null);
+    // foundAdmin.setGroups(null);
+    // foundAdmin.setDrivers(null);
+    // foundAdmin.setTravels(null);
+    // foundAdmin.setRoutes(null);
 
-            for (Tramo tramo : route.getTramos()) {
-                tramo.setRoute(null);
-            }
-        }
+    // return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    // }
 
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    }
-
-    // Administrator (Individual Information): Find -> Id
-    @GetMapping("/admins/info/id/{id}")
-    public ResponseEntity<Administrator> getAdminInfoById(@PathVariable("id") Long id) {
-        Administrator foundAdmin = administratorRepository.findById(id).get();
-
-        foundAdmin.setGroups(null);
-        foundAdmin.setDrivers(null);
-        foundAdmin.setTravels(null);
-        foundAdmin.setRoutes(null);
-
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    }
-
-    // Administrator (Individual Information): Find -> Email
-    @GetMapping("/admins/info/email/{email}")
-    public ResponseEntity<Administrator> getAdminInfoByEmail(@PathVariable("email") String email) {
-        Administrator foundAdmin = administratorRepository.findByEmail(email);
-
-        foundAdmin.setGroups(null);
-        foundAdmin.setDrivers(null);
-        foundAdmin.setTravels(null);
-        foundAdmin.setRoutes(null);
-
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    }
-
-    // Administrator: Add
+    // CREATE
     @PostMapping("/admins")
     public ResponseEntity<Administrator> addAdministrator(@RequestBody Administrator adminBody) {
         Administrator foundAdmin = administratorRepository.save(new Administrator(adminBody.getNames(),
@@ -263,8 +261,8 @@ public class AdministratorController {
         return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.CREATED);
     }
 
-    // Administrator: Edit -> Id
-    @PutMapping("/admins/id/{id}")
+    // UPDATE
+    @PutMapping("/admins/{id}")
     public ResponseEntity<Administrator> updateAdminById(@PathVariable("id") Long id,
             @RequestBody Administrator bodyAdmin) {
         Administrator foundAdmin = administratorRepository.findById(id).get();
@@ -296,8 +294,8 @@ public class AdministratorController {
         return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
     }
 
-    // Administrator: Delete -> Id
-    @DeleteMapping("/admins/id/{id}")
+    // DELETE
+    @DeleteMapping("/admins/{id}")
     public ResponseEntity<List<Administrator>> deleteAdminById(@PathVariable("id") Long id) {
         administratorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);

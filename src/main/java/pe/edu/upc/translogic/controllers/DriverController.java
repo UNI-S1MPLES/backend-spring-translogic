@@ -32,11 +32,11 @@ import pe.edu.upc.translogic.repositories.TramoRepository;
 public class DriverController {
     @Autowired
     private DriverRepository driverRepository;
+    private AdministratorRepository adminOfDriverRepository;
+    private GroupRepository GroupOfDriverRepository;
 
-    // Mostrar toda la información de cada Driver
     @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers() {
-
         List<Driver> listDrivers = driverRepository.findAll();
 
         if (listDrivers.isEmpty()) {
@@ -62,10 +62,8 @@ public class DriverController {
         return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
     }
 
-    // Mostrar solo la información básica de cada Drivers
     @GetMapping("/drivers/info")
     public ResponseEntity<List<Driver>> getAllDriversInfo() {
-
         List<Driver> listDrivers = driverRepository.findAll();
 
         if (listDrivers.isEmpty()) {
@@ -79,104 +77,74 @@ public class DriverController {
         return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
     }
 
-    // Mostrar solo la información básica de los Travels realizados por cada Driver
-    @GetMapping("/drivers/travels")
-    public ResponseEntity<List<Driver>> getAllDriversTravels() {
-
-        List<Driver> drivers = driverRepository.findAll();
-
-        if (drivers.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Driver item : drivers) {
-            item.setAdministrator(null);
-            item.setGroup(null);
-
-            for (Travel travel : item.getTravels()) {
-                travel.setAdministrator(null);
-                travel.setDriver(null);
-                travel.setRoute(null);
-                travel.setVehicle(null);
-            }
-        }
-        return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
-    }
-
-    // Buscar toda la información de un Driver a partir de su ID
     @GetMapping("/drivers/{id}")
-    public ResponseEntity<Driver> getDriverById(@PathVariable("id") Long id,
-            @RequestBody Driver bodyAdmin) {
+    public ResponseEntity<Driver> getDriverById(@PathVariable("id") Long id) {
         Driver foundDriver = driverRepository.findById(id).get();
 
-        foundDriver.getGroup().setAdministrator(null);
-        foundDriver.getGroup().setDrivers(null);
+        if (foundDriver == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         foundDriver.getAdministrator().setGroups(null);
         foundDriver.getAdministrator().setDrivers(null);
         foundDriver.getAdministrator().setTravels(null);
         foundDriver.getAdministrator().setRoutes(null);
 
-        for (Travel travel : foundDriver.getTravels()) {
-            // Administrator
-            travel.getAdministrator().setGroups(null);
-            travel.getAdministrator().setDrivers(null);
-            travel.getAdministrator().setTravels(null);
-            travel.getAdministrator().setRoutes(null);
-            // Driver
-            travel.setDriver(null);
-            // Route
-            travel.getRoute().setAdministrator(null);
-            travel.getRoute().setTravels(null);
-            // Tramos
-            for (Tramo tramo : travel.getRoute().getTramos()) {
-                tramo.setRoute(null);
-            }
-            // Vehicle
-            travel.getVehicle().setTravels(null);
+        foundDriver.getGroup().setAdministrator(null);
+        foundDriver.getGroup().setDrivers(null);
 
-            // OCULTAR COSAS (PARA PRUEBAS)
-            // travel.setAdministrator(null);
-            // travel.setDriver(null);
-            // travel.setRoute(null);
-            // travel.setVehicle(null);
+        for (Travel travel : foundDriver.getTravels()) {
+            travel.setAdministrator(null);
+            travel.setDriver(null);
+            travel.setRoute(null);
+            travel.setVehicle(null);
         }
 
         return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
     }
 
-    // Buscar todos los Travels realizados por un Driver a partir de su ID
-    @GetMapping("/drivers/travels/{id}")
-    public ResponseEntity<Driver> getDriverTravelById(@PathVariable("id") Long id,
-            @RequestBody Driver bodyAdmin) {
+    @GetMapping("/drivers/info/{id}")
+    public ResponseEntity<Driver> getDriverInfoById(@PathVariable("id") Long id) {
         Driver foundDriver = driverRepository.findById(id).get();
 
-        foundDriver.setGroup(null);
-        foundDriver.setAdministrator(null);
-
-        for (Travel travel : foundDriver.getTravels()) {
-            // Administrator
-            travel.getAdministrator().setGroups(null);
-            travel.getAdministrator().setDrivers(null);
-            travel.getAdministrator().setTravels(null);
-            travel.getAdministrator().setRoutes(null);
-            // Driver
-            travel.setDriver(null);
-            // Route
-            travel.getRoute().setAdministrator(null);
-            travel.getRoute().setTravels(null);
-            // Tramos
-            for (Tramo tramo : travel.getRoute().getTramos()) {
-                tramo.setRoute(null);
-            }
-            // Vehicle
-            travel.getVehicle().setTravels(null);
-
-            // OCULTAR COSAS (PARA PRUEBAS)
-            // travel.setAdministrator(null);
-            // travel.setDriver(null);
-            // travel.setRoute(null);
-            // travel.setVehicle(null);
+        if (foundDriver == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        foundDriver.setAdministrator(null);
+        foundDriver.setGroup(null);
+        foundDriver.setTravels(null);
 
         return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
+    }
+
+    // Mostrar solo la información básica de los Travels realizados por cada Driver
+    @GetMapping("/drivers/admin/{id}")
+    public ResponseEntity<Administrator> getAdminOfDriverById(@PathVariable("id") Long id) {
+        Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
+        Administrator admin = adminOfDriverRepository.findById(idAdminOfDriver).get();
+
+        if (admin == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        admin.setGroups(null);
+        admin.setDrivers(null);
+        admin.setTravels(null);
+        admin.setRoutes(null);
+
+        return new ResponseEntity<Administrator>(admin, HttpStatus.OK);
+    }
+
+    // Mostrar solo la información básica de los Travels realizados por cada Driver
+    @GetMapping("/drivers/group/{id}")
+    public ResponseEntity<Group> getGroupOfDriverById(@PathVariable("id") Long id) {
+        Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
+        Group group = GroupOfDriverRepository.findById(idAdminOfDriver).get();
+
+        if (group == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        group.setAdministrator(null);
+        group.setDrivers(null);
+
+        return new ResponseEntity<Group>(group, HttpStatus.OK);
     }
 }

@@ -59,17 +59,4 @@ public class VehicleController {
         }
         return new ResponseEntity<List<Vehicle>>(listVehicles, HttpStatus.OK);
     }
-
-    // // vehicles y travels
-    // @GetMapping("/vehicles-travels")
-    // public ResponseEntity<List<Vehicle>> getAllVehiclesAndTravels() {
-
-    // List<Vehicle> vehicles = vehicleRepository.findAll();
-    // for (Vehicle v : vehicles) {
-    // for (Travel t : v.getTravels()) {
-    // t.setVehicles(null);
-    // }
-    // }
-    // return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
-    // }
 }
