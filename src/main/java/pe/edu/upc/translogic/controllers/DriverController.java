@@ -26,14 +26,16 @@ import pe.edu.upc.translogic.repositories.RouteRepository;
 import pe.edu.upc.translogic.repositories.VehicleRepository;
 import pe.edu.upc.translogic.repositories.TramoRepository;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class DriverController {
     @Autowired
     private DriverRepository driverRepository;
-    private AdministratorRepository adminOfDriverRepository;
-    private GroupRepository GroupOfDriverRepository;
+    @Autowired
+    private AdministratorRepository adminRepository;
+    @Autowired
+    private GroupRepository groupRepository;
 
     @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers() {
@@ -119,8 +121,9 @@ public class DriverController {
     // Mostrar solo la información básica de los Travels realizados por cada Driver
     @GetMapping("/drivers/admin/{id}")
     public ResponseEntity<Administrator> getAdminOfDriverById(@PathVariable("id") Long id) {
+
         Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
-        Administrator admin = adminOfDriverRepository.findById(idAdminOfDriver).get();
+        Administrator admin = adminRepository.findById(idAdminOfDriver).get();
 
         if (admin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -137,7 +140,7 @@ public class DriverController {
     @GetMapping("/drivers/group/{id}")
     public ResponseEntity<Group> getGroupOfDriverById(@PathVariable("id") Long id) {
         Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
-        Group group = GroupOfDriverRepository.findById(idAdminOfDriver).get();
+        Group group = groupRepository.findById(idAdminOfDriver).get();
 
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

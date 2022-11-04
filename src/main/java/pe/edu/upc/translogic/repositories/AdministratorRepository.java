@@ -14,9 +14,11 @@ import pe.edu.upc.translogic.entities.Route;
 public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
 
     // NO FUNCA
-    // @Query(value = "SELECT * FROM groups WHERE administrator_id = ?1",
-    // nativeQuery = true)
-    // List<Group> findGroupsById(Long id);
+    @Query(value = "SELECT * FROM groups WHERE administrator_id = ?1", nativeQuery = true)
+    List<Group> findGroupsById(Long id);
+
+    @Query("SELECT g FROM Group g WHERE g.administrator.id = ?1")
+    List<Group> findGroupsByIdJPQL(Long id);
 
     // JPA
     Administrator findByEmail(String email);
@@ -24,7 +26,8 @@ public interface AdministratorRepository extends JpaRepository<Administrator, Lo
     // JPA
     Administrator findByNickname(String nickname);
 
-    // NO FUNCA
-    @Query(value = "DELETE * FROM administrators WHERE email = ?1", nativeQuery = true)
-    Administrator deleteByEmailSQL(String email);
+    // // NO FUNCA
+    // @Query(value = "DELETE * FROM administrators WHERE email = ?1", nativeQuery =
+    // true)
+    // Administrator deleteByEmailSQL(String email);
 }

@@ -42,13 +42,14 @@ public class TranslogicApplication {
 				Administrator admin1 = new Administrator("Brian Kaoru", "Uceda Hirata", "brian.uceda@gmail.com",
 						924227432, "Kiridepapel", "Pass111");
 
-				Group group1 = new Group("Norte");
-				Driver driver1 = new Driver("Driver1", "XD1", date, date, "Activo");
+				Group group1 = new Group("North");
+				Driver driver1 = new Driver("Driver1", "XD1", date, date, "Active");
 				Route route1 = new Route("Lima", "Trujillo");
-				Tramo tramo1 = new Tramo("Tramo numero1");
-				Tramo tramo2 = new Tramo("Tramo numero2");
+				Tramo tramo1 = new Tramo("Lima");
+				Tramo tramo2 = new Tramo("Lambayeque");
+				Tramo tramo3 = new Tramo("La Libertad");
 				Vehicle vehicle1 = new Vehicle(20);
-				Travel travel1 = new Travel(date, date, 16, "En curso");
+				Travel travel1 = new Travel(date, date, 16, "In progress");
 
 				group1.setAdministrator(admin1);
 				driver1.setAdministrator(admin1);
@@ -58,6 +59,7 @@ public class TranslogicApplication {
 				driver1.setGroup(group1);
 				tramo1.setRoute(route1);
 				tramo2.setRoute(route1);
+				tramo3.setRoute(route1);
 
 				// PARA VIAJE
 
@@ -69,6 +71,7 @@ public class TranslogicApplication {
 				vehicleRepository.save(vehicle1);
 				tramoRepository.save(tramo1);
 				tramoRepository.save(tramo2);
+				tramoRepository.save(tramo3);
 
 				// Administrator admin2 = new Administrator("Jesus", "Cardenas",
 				// "jesus.cardenas@gmail.com", 930348850,

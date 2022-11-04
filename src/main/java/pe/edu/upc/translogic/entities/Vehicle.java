@@ -15,12 +15,12 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    private Integer km_travelled;
+    private Integer kmTravelled;
 
     @OneToMany(mappedBy = "vehicle")
     private List<Travel> travels;
 
-    public Vehicle(Integer km_travelled) {
-        this.km_travelled = km_travelled;
+    public Vehicle(Integer kmTravelled) {
+        this.kmTravelled = kmTravelled;
     }
 }

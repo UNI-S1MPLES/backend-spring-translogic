@@ -22,6 +22,7 @@ import pe.edu.upc.translogic.entities.Travel;
 import pe.edu.upc.translogic.entities.Route;
 import pe.edu.upc.translogic.entities.Tramo;
 import pe.edu.upc.translogic.repositories.AdministratorRepository;
+import pe.edu.upc.translogic.repositories.GroupRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -32,6 +33,7 @@ public class AdministratorController {
 
     @GetMapping("/admins")
     public ResponseEntity<List<Administrator>> getAllAdmins() {
+
         List<Administrator> administrators = administratorRepository.findAll();
 
         if (administrators.isEmpty()) {
@@ -67,6 +69,7 @@ public class AdministratorController {
 
     @GetMapping("/admins/info")
     public ResponseEntity<List<Administrator>> getAllAdminsInfo() {
+
         List<Administrator> administrators = administratorRepository.findAll();
 
         if (administrators.isEmpty()) {
@@ -83,6 +86,7 @@ public class AdministratorController {
 
     @GetMapping("/admins/{id}")
     public ResponseEntity<Administrator> getAdminById(@PathVariable("id") Long id) {
+
         Administrator foundAdmin = administratorRepository.findById(id).get();
 
         if (foundAdmin == null) {
@@ -116,6 +120,7 @@ public class AdministratorController {
 
     @GetMapping("/admins/info/{id}")
     public ResponseEntity<Administrator> getAdminInfoById(@PathVariable("id") Long id) {
+
         Administrator foundAdmin = administratorRepository.findById(id).get();
 
         if (foundAdmin == null) {
@@ -132,9 +137,10 @@ public class AdministratorController {
     @GetMapping("/admins/groups/{id}")
     public ResponseEntity<List<Group>> getAllGroupsOfAdminById(@PathVariable("id") Long id) {
 
+        // List<Group> groups = administratorRepository.findGroupsById(id); // NO FUNCA
+
         Administrator administrator = administratorRepository.findById(id).get();
         List<Group> groups = administrator.getGroups();
-        // List<Group> groups = administratorRepository.findGroupsById(id); // NO FUNCA
 
         if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

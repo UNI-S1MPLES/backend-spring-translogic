@@ -24,7 +24,7 @@ import pe.edu.upc.translogic.repositories.RouteRepository;
 import pe.edu.upc.translogic.repositories.VehicleRepository;
 import pe.edu.upc.translogic.repositories.TramoRepository;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class VehicleController {
