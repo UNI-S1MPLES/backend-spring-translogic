@@ -48,9 +48,11 @@ public class TranslogicApplication {
 				Group group1 = new Group("North");
 				Driver driver1 = new Driver("Driver1", "XD1", date, date, "Active");
 				Route route1 = new Route("Lima", "Trujillo");
+				Route route2 = new Route("Lima", "Narnia");
 				Tramo tramo1 = new Tramo("Lima");
 				Tramo tramo2 = new Tramo("Lambayeque");
 				Tramo tramo3 = new Tramo("La Libertad");
+				Tramo tramo4 = new Tramo("Narnia");
 				Vehicle vehicle1 = new Vehicle(20);
 				Travel travel1 = new Travel(date, date, 16, "In progress");
 
@@ -58,27 +60,28 @@ public class TranslogicApplication {
 				driver1.setAdministrator(admin1);
 				travel1.setAdministrator(admin1);
 				route1.setAdministrator(admin1);
+				route2.setAdministrator(admin1);
 
+				// Driver
 				driver1.setGroup(group1);
-				// tramo1.setRoute(route1);
-				// tramo2.setRoute(route1);
-				// tramo3.setRoute(route1);
-
-				// PARA VIAJE
-
+				// Travel
 				administratorRepository.save(admin1);
 				groupRepository.save(group1);
 				driverRepository.save(driver1);
 				travelRepository.save(travel1);
 				routeRepository.save(route1);
+				routeRepository.save(route2);
 				vehicleRepository.save(vehicle1);
 				tramoRepository.save(tramo1);
 				tramoRepository.save(tramo2);
 				tramoRepository.save(tramo3);
+				tramoRepository.save(tramo4);
 
 				routeTramoRepository.save(new RouteTramo(route1, tramo1));
 				routeTramoRepository.save(new RouteTramo(route1, tramo2));
 				routeTramoRepository.save(new RouteTramo(route1, tramo3));
+				routeTramoRepository.save(new RouteTramo(route2, tramo3));
+				routeTramoRepository.save(new RouteTramo(route2, tramo4));
 
 				// Administrator admin2 = new Administrator("Jesus", "Cardenas",
 				// "jesus.cardenas@gmail.com", 930348850,

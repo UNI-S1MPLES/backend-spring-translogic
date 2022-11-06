@@ -109,10 +109,7 @@ public class AdministratorController {
         for (Route route : foundAdmin.getRoutes()) {
             route.setAdministrator(null);
             route.setTravels(null);
-
-            // for (Tramo tramo : route.getTramos()) {
-            // tramo.setRoute(null);
-            // }
+            route.setRouteTramos(null);
         }
 
         return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
@@ -202,7 +199,7 @@ public class AdministratorController {
         for (Route item : routes) {
             item.setAdministrator(null);
             item.setTravels(null);
-            // item.setTramos(null);
+            item.setRouteTramos(null);
         }
 
         return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);

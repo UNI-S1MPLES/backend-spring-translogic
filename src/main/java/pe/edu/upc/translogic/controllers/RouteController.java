@@ -35,8 +35,6 @@ public class RouteController {
     @Autowired
     private RouteRepository routeRepository;
     @Autowired
-    private TramoRepository tramoRepository;
-    @Autowired
     private RouteTramoRepository routeTramoRepository;
 
     // Only Routes
@@ -48,31 +46,7 @@ public class RouteController {
         for (Route item : listRoutes) {
             item.setAdministrator(null);
             item.setTravels(null);
-
-            // List<Tramo> listTramos = new ArrayList<>();
-            // for (RouteTramo routeTramo : item.getRouteTramos()) {
-            // if (routeTramo.getRoute().getId() == item.getId())
-            // listTramos.add(routeTramo.getTramo());
-            // }
-
-            // for (Tramo tramo : item.getRouteTramos()) {
-            // tramo.setRoute(null);
-            // }
-        }
-
-        return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
-    }
-
-    // Only Routes
-    @GetMapping("/routes/info")
-    public ResponseEntity<List<Route>> getAllRoutesInfo() {
-
-        List<Route> listRoutes = routeRepository.findAll();
-
-        for (Route item : listRoutes) {
-            item.setAdministrator(null);
-            item.setTravels(null);
-            // item.setTramos(null);
+            item.setRouteTramos(null);
         }
 
         return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
@@ -91,4 +65,19 @@ public class RouteController {
 
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
+
+    // // No es necesario
+    // @GetMapping("/routes/info")
+    // public ResponseEntity<List<Route>> getAllRoutesInfo() {
+
+    // List<Route> listRoutes = routeRepository.findAll();
+
+    // for (Route item : listRoutes) {
+    // item.setAdministrator(null);
+    // item.setTravels(null);
+    // item.setRouteTramos(null);
+    // }
+
+    // return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
+    // }
 }
