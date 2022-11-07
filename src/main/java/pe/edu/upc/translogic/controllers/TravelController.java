@@ -46,19 +46,15 @@ public class TravelController {
             item.getAdministrator().setTravels(null);
             item.getAdministrator().setRoutes(null);
 
-            // DRIVER && GROUP
             item.getDriver().setAdministrator(null);
-            item.getDriver().getGroup().setAdministrator(null);
-            item.getDriver().getGroup().setDrivers(null);
+            item.getDriver().setGroup(null);
             item.getDriver().setTravels(null);
-            // Route
-            // item.getRoute().setAdministrator(null);
-            // item.getRoute().setTravels(null);
-            // item.getRoute().setTramos(null);
-            // for (Tramo tramo : item.getRoute().getTramos())
-            // tramo.setRoute(null);
-            // Vehicle
-            // item.getVehicle().setTravels(null);
+
+            item.getVehicle().setTravels(null);
+
+            item.getRoute().setAdministrator(null);
+            item.getRoute().setTravels(null);
+            item.getRoute().setRouteTramos(null);
         }
 
         return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);

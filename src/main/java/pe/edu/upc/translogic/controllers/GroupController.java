@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,7 +34,48 @@ public class GroupController {
 
     // Mostrar toda la
     @GetMapping("/groups")
+    public ResponseEntity<List<Group>> getAllGroups() {
+
+        List<Group> groups = groupRepository.findAll();
+
+        if (groups.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Group item : groups) {
+
+            item.getAdministrator().setGroups(null);
+            item.getAdministrator().setDrivers(null);
+            item.getAdministrator().setTravels(null);
+            item.getAdministrator().setRoutes(null);
+
+            for (Driver driver : item.getDrivers()) {
+                driver.setAdministrator(null);
+                driver.setGroup(null);
+                driver.setTravels(null);
+            }
+        }
+        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+    }
+
+    // Only Group
+    @GetMapping("/groups/info")
     public ResponseEntity<List<Group>> getAllGroupsInfo() {
+
+        List<Group> groups = groupRepository.findAll();
+
+        if (groups.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Group item : groups) {
+            item.setAdministrator(null);
+            item.setDrivers(null);
+        }
+        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+    }
+
+    // Mostrar toda la
+    @GetMapping("/groups/admin/{id}")
+    public ResponseEntity<List<Group>> getAdminByGroupId(@PathVariable("id") Long id) {
 
         List<Group> groups = groupRepository.findAll();
 
@@ -56,18 +98,27 @@ public class GroupController {
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 
-    // Only Group
-    @GetMapping("/groups/info")
-    public ResponseEntity<List<Group>> getAllGroups() {
+    // Mostrar toda la
+    @GetMapping("/groups/drivers/{id}")
+    public ResponseEntity<List<Group>> getAllDriversByGroupId(@PathVariable("id") Long id) {
 
         List<Group> groups = groupRepository.findAll();
 
         if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Group item : groups) {
-            item.setAdministrator(null);
-            item.setDrivers(null);
+        for (Group group : groups) {
+
+            group.getAdministrator().setGroups(null);
+            group.getAdministrator().setDrivers(null);
+            group.getAdministrator().setTravels(null);
+            group.getAdministrator().setRoutes(null);
+
+            for (Driver driver : group.getDrivers()) {
+                driver.setAdministrator(null);
+                driver.setGroup(null);
+                driver.setTravels(null);
+            }
         }
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }

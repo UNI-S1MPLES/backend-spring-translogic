@@ -64,21 +64,6 @@ public class DriverController {
         return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
     }
 
-    @GetMapping("/drivers/info")
-    public ResponseEntity<List<Driver>> getAllDriversInfo() {
-        List<Driver> listDrivers = driverRepository.findAll();
-
-        if (listDrivers.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Driver item : listDrivers) {
-            item.setAdministrator(null);
-            item.setGroup(null);
-            item.setTravels(null);
-        }
-        return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
-    }
-
     @GetMapping("/drivers/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable("id") Long id) {
         Driver foundDriver = driverRepository.findById(id).get();
@@ -104,6 +89,21 @@ public class DriverController {
         return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
     }
 
+    @GetMapping("/drivers/info")
+    public ResponseEntity<List<Driver>> getAllDriversInfo() {
+        List<Driver> listDrivers = driverRepository.findAll();
+
+        if (listDrivers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Driver item : listDrivers) {
+            item.setAdministrator(null);
+            item.setGroup(null);
+            item.setTravels(null);
+        }
+        return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
+    }
+
     @GetMapping("/drivers/info/{id}")
     public ResponseEntity<Driver> getDriverInfoById(@PathVariable("id") Long id) {
         Driver foundDriver = driverRepository.findById(id).get();
@@ -120,7 +120,7 @@ public class DriverController {
 
     // Mostrar solo la información básica de los Travels realizados por cada Driver
     @GetMapping("/drivers/admin/{id}")
-    public ResponseEntity<Administrator> getAdminOfDriverById(@PathVariable("id") Long id) {
+    public ResponseEntity<Administrator> getAdminByDriverId(@PathVariable("id") Long id) {
 
         Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
         Administrator admin = adminRepository.findById(idAdminOfDriver).get();
@@ -138,7 +138,7 @@ public class DriverController {
 
     // Mostrar solo la información básica de los Travels realizados por cada Driver
     @GetMapping("/drivers/group/{id}")
-    public ResponseEntity<Group> getGroupOfDriverById(@PathVariable("id") Long id) {
+    public ResponseEntity<Group> getGroupByDriverId(@PathVariable("id") Long id) {
         Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
         Group group = groupRepository.findById(idAdminOfDriver).get();
 

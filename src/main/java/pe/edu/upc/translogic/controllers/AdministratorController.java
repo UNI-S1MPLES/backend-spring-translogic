@@ -52,15 +52,13 @@ public class AdministratorController {
             for (Travel travel : item.getTravels()) {
                 travel.setAdministrator(null);
                 travel.setDriver(null);
+                travel.setVehicle(null);
                 travel.setRoute(null);
             }
             for (Route route : item.getRoutes()) {
                 route.setAdministrator(null);
                 route.setTravels(null);
-
-                // for (Tramo tramo : route.getTramos()) {
-                // tramo.setRoute(null);
-                // }
+                route.setRouteTramos(null);
             }
         }
 
@@ -104,6 +102,7 @@ public class AdministratorController {
         for (Travel travel : foundAdmin.getTravels()) {
             travel.setAdministrator(null);
             travel.setDriver(null);
+            travel.setVehicle(null);
             travel.setRoute(null);
         }
         for (Route route : foundAdmin.getRoutes()) {
@@ -132,7 +131,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/admins/groups/{id}")
-    public ResponseEntity<List<Group>> getAllGroupsOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Group>> getAllGroupsByAdminId(@PathVariable("id") Long id) {
 
         // List<Group> groups = administratorRepository.findGroupsById(id); // NO FUNCA
 
@@ -151,7 +150,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/admins/drivers/{id}")
-    public ResponseEntity<List<Driver>> getAllDriversOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Driver>> getAllDriversByAdminId(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Driver> drivers = administrator.getDrivers();
@@ -169,7 +168,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/admins/travels/{id}")
-    public ResponseEntity<List<Travel>> getAllTravelsOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Travel>> getAllTravelsByAdminId(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Travel> travels = administrator.getTravels();
@@ -188,7 +187,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/admins/routes/{id}")
-    public ResponseEntity<List<Route>> getAllRoutesOfAdminById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Route>> getAllRoutesByAdminId(@PathVariable("id") Long id) {
 
         Administrator administrator = administratorRepository.findById(id).get();
         List<Route> routes = administrator.getRoutes();
