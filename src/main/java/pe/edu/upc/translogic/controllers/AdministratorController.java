@@ -204,50 +204,6 @@ public class AdministratorController {
         return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);
     }
 
-    // @GetMapping("/admins/email/{email}")
-    // public ResponseEntity<Administrator> getAdminByEmail(@PathVariable("email")
-    // String email) {
-    // Administrator foundAdmin = administratorRepository.findByEmail(email);
-
-    // for (Group group : foundAdmin.getGroups()) {
-    // group.setAdministrator(null);
-    // group.setDrivers(null);
-    // }
-    // for (Driver driver : foundAdmin.getDrivers()) {
-    // driver.setAdministrator(null);
-    // driver.setGroup(null);
-    // driver.setTravels(null);
-    // }
-    // for (Travel travel : foundAdmin.getTravels()) {
-    // travel.setAdministrator(null);
-    // travel.setDriver(null);
-    // travel.setRoute(null);
-    // }
-    // for (Route route : foundAdmin.getRoutes()) {
-    // route.setAdministrator(null);
-    // route.setTravels(null);
-
-    // for (Tramo tramo : route.getTramos()) {
-    // tramo.setRoute(null);
-    // }
-    // }
-
-    // return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    // }
-
-    // @GetMapping("/admins/info/email/{email}")
-    // public ResponseEntity<Administrator>
-    // getAdminInfoByEmail(@PathVariable("email") String email) {
-    // Administrator foundAdmin = administratorRepository.findByEmail(email);
-
-    // foundAdmin.setGroups(null);
-    // foundAdmin.setDrivers(null);
-    // foundAdmin.setTravels(null);
-    // foundAdmin.setRoutes(null);
-
-    // return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
-    // }
-
     // CREATE
     @PostMapping("/admins")
     public ResponseEntity<Administrator> addAdministrator(@RequestBody Administrator adminBody) {

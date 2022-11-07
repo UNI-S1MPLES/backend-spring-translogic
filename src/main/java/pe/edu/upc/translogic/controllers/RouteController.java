@@ -1,7 +1,7 @@
 package pe.edu.upc.translogic.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,14 +37,18 @@ public class RouteController {
     @Autowired
     private RouteTramoRepository routeTramoRepository;
 
-    // Only Routes
     @GetMapping("/routes")
     public ResponseEntity<List<Route>> getAllRoutes() {
 
         List<Route> listRoutes = routeRepository.findAll();
 
         for (Route item : listRoutes) {
-            item.setAdministrator(null);
+
+            item.getAdministrator().setGroups(null);
+            item.getAdministrator().setDrivers(null);
+            item.getAdministrator().setTravels(null);
+            item.getAdministrator().setRoutes(null);
+
             item.setTravels(null);
             item.setRouteTramos(null);
         }
@@ -52,9 +56,63 @@ public class RouteController {
         return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
     }
 
-    // Only Routes
+    @GetMapping("/routes/{id}")
+    public ResponseEntity<Route> getRouteById(@PathVariable("id") Long id) {
+
+        Route foundRoute = routeRepository.findById(id).get();
+
+        foundRoute.getAdministrator().setGroups(null);
+        foundRoute.getAdministrator().setDrivers(null);
+        foundRoute.getAdministrator().setTravels(null);
+        foundRoute.getAdministrator().setRoutes(null);
+
+        foundRoute.setTravels(null);
+        foundRoute.setRouteTramos(null);
+
+        return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
+    }
+
+    @GetMapping("/routes/info")
+    public ResponseEntity<List<Route>> getAllRoutesInfo() {
+
+        List<Route> routes = routeRepository.findAll();
+
+        for (Route item : routes) {
+            item.setAdministrator(null);
+            item.setTravels(null);
+            item.setRouteTramos(null);
+        }
+
+        return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);
+    }
+
+    @GetMapping("/routes/info/{id}")
+    public ResponseEntity<Route> getRouteInfoById(@PathVariable("id") Long id) {
+
+        Route foundRoute = routeRepository.findById(id).get();
+
+        foundRoute.setAdministrator(null);
+        foundRoute.setTravels(null);
+        foundRoute.setRouteTramos(null);
+
+        return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
+    }
+
+    @GetMapping("/routes/admin/{id}")
+    public ResponseEntity<Administrator> getAdminByRouteId(@PathVariable("id") Long id) {
+
+        Administrator foundAdmin = routeRepository.findById(id).get().getAdministrator();
+
+        foundAdmin.setGroups(null);
+        foundAdmin.setDrivers(null);
+        foundAdmin.setTravels(null);
+        foundAdmin.setRoutes(null);
+
+        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    }
+
     @GetMapping("/routes/tramos/{id}")
-    public ResponseEntity<List<Tramo>> getAllTramosOfRouteById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Tramo>> getAllTramosByRouteId(@PathVariable("id") Long id) {
 
         List<Tramo> listTramos = new ArrayList<>();
 
@@ -65,19 +123,4 @@ public class RouteController {
 
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
-
-    // // No es necesario
-    // @GetMapping("/routes/info")
-    // public ResponseEntity<List<Route>> getAllRoutesInfo() {
-
-    // List<Route> listRoutes = routeRepository.findAll();
-
-    // for (Route item : listRoutes) {
-    // item.setAdministrator(null);
-    // item.setTravels(null);
-    // item.setRouteTramos(null);
-    // }
-
-    // return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
-    // }
 }

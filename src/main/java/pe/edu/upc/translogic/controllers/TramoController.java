@@ -1,7 +1,7 @@
 package pe.edu.upc.translogic.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,17 +37,24 @@ public class TramoController {
     @Autowired
     private RouteTramoRepository routeTramoRepository;
 
-    // Only Tramo
     @GetMapping("/tramos")
     public ResponseEntity<List<Tramo>> getAllTramos() {
 
         List<Tramo> listTramos = tramoRepository.findAll();
+
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
 
-    // Only Routes
+    @GetMapping("/tramos/{id}")
+    public ResponseEntity<Tramo> getTramoById(@PathVariable("id") Long id) {
+
+        Tramo foundTramo = tramoRepository.findById(id).get();
+
+        return new ResponseEntity<Tramo>(foundTramo, HttpStatus.OK);
+    }
+
     @GetMapping("/tramos/routes/{id}")
-    public ResponseEntity<List<Route>> getAllRoutesOfTramoById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Route>> getAllRoutesByTramoId(@PathVariable("id") Long id) {
 
         List<Route> listRoutes = new ArrayList<>();
 
@@ -62,17 +69,4 @@ public class TramoController {
 
         return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
     }
-
-    // // No es necesario
-    // @GetMapping("/tramos/info")
-    // public ResponseEntity<List<Tramo>> getAllTramosInfo() {
-
-    // List<Tramo> listTramos = tramoRepository.findAll();
-
-    // // for (Tramo item : listTramos) {
-    // // item.setRoute(null);
-    // // }
-    // return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
-    // }
-
 }

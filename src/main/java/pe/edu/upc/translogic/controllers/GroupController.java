@@ -3,6 +3,7 @@ package pe.edu.upc.translogic.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,6 @@ public class GroupController {
     @Autowired
     private GroupRepository groupRepository;
 
-    // Mostrar toda la
     @GetMapping("/groups")
     public ResponseEntity<List<Group>> getAllGroups() {
 
@@ -41,6 +41,7 @@ public class GroupController {
         if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         for (Group item : groups) {
 
             item.getAdministrator().setGroups(null);
@@ -54,10 +55,33 @@ public class GroupController {
                 driver.setTravels(null);
             }
         }
+
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 
-    // Only Group
+    @GetMapping("/groups/{id}")
+    public ResponseEntity<Group> getGroupById(@PathVariable("id") Long id) {
+
+        Group foundGroup = groupRepository.findById(id).get();
+
+        if (foundGroup == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundGroup.getAdministrator().setGroups(null);
+        foundGroup.getAdministrator().setDrivers(null);
+        foundGroup.getAdministrator().setTravels(null);
+        foundGroup.getAdministrator().setRoutes(null);
+
+        for (Driver driver : foundGroup.getDrivers()) {
+            driver.setAdministrator(null);
+            driver.setGroup(null);
+            driver.setTravels(null);
+        }
+
+        return new ResponseEntity<Group>(foundGroup, HttpStatus.OK);
+    }
+
     @GetMapping("/groups/info")
     public ResponseEntity<List<Group>> getAllGroupsInfo() {
 
@@ -66,60 +90,63 @@ public class GroupController {
         if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         for (Group item : groups) {
             item.setAdministrator(null);
             item.setDrivers(null);
         }
+
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 
-    // Mostrar toda la
+    @GetMapping("/groups/info/{id}")
+    public ResponseEntity<Group> getGroupInfoById(@PathVariable("id") Long id) {
+
+        Group foundGroup = groupRepository.findById(id).get();
+
+        if (foundGroup == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundGroup.setAdministrator(null);
+        foundGroup.setDrivers(null);
+
+        return new ResponseEntity<Group>(foundGroup, HttpStatus.OK);
+    }
+
     @GetMapping("/groups/admin/{id}")
-    public ResponseEntity<List<Group>> getAdminByGroupId(@PathVariable("id") Long id) {
+    public ResponseEntity<Administrator> getAdminByGroupId(@PathVariable("id") Long id) {
 
-        List<Group> groups = groupRepository.findAll();
+        Administrator foundAdmin = groupRepository.findById(id).get().getAdministrator();
 
-        if (groups.isEmpty()) {
+        if (foundAdmin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Group group : groups) {
 
-            group.getAdministrator().setGroups(null);
-            group.getAdministrator().setDrivers(null);
-            group.getAdministrator().setTravels(null);
-            group.getAdministrator().setRoutes(null);
+        foundAdmin.setGroups(null);
+        foundAdmin.setDrivers(null);
+        foundAdmin.setTravels(null);
+        foundAdmin.setRoutes(null);
 
-            for (Driver driver : group.getDrivers()) {
-                driver.setAdministrator(null);
-                driver.setGroup(null);
-                driver.setTravels(null);
-            }
-        }
-        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
     }
 
-    // Mostrar toda la
     @GetMapping("/groups/drivers/{id}")
-    public ResponseEntity<List<Group>> getAllDriversByGroupId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Driver>> getAllDriversByGroupId(@PathVariable("id") Long id) {
 
-        List<Group> groups = groupRepository.findAll();
+        List<Driver> drivers = groupRepository.findById(id).get().getDrivers();
 
-        if (groups.isEmpty()) {
+        if (drivers.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Group group : groups) {
 
-            group.getAdministrator().setGroups(null);
-            group.getAdministrator().setDrivers(null);
-            group.getAdministrator().setTravels(null);
-            group.getAdministrator().setRoutes(null);
+        for (Driver driver : drivers) {
 
-            for (Driver driver : group.getDrivers()) {
-                driver.setAdministrator(null);
-                driver.setGroup(null);
-                driver.setTravels(null);
-            }
+            driver.setAdministrator(null);
+            driver.setGroup(null);
+            driver.setTravels(null);
         }
-        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+
+        return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package pe.edu.upc.translogic.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +33,10 @@ import pe.edu.upc.translogic.repositories.TramoRepository;
 public class DriverController {
     @Autowired
     private DriverRepository driverRepository;
-    @Autowired
-    private AdministratorRepository adminRepository;
-    @Autowired
-    private GroupRepository groupRepository;
 
     @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers() {
+
         List<Driver> listDrivers = driverRepository.findAll();
 
         if (listDrivers.isEmpty()) {
@@ -66,11 +64,13 @@ public class DriverController {
 
     @GetMapping("/drivers/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable("id") Long id) {
+
         Driver foundDriver = driverRepository.findById(id).get();
 
         if (foundDriver == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         foundDriver.getAdministrator().setGroups(null);
         foundDriver.getAdministrator().setDrivers(null);
         foundDriver.getAdministrator().setTravels(null);
@@ -91,26 +91,31 @@ public class DriverController {
 
     @GetMapping("/drivers/info")
     public ResponseEntity<List<Driver>> getAllDriversInfo() {
-        List<Driver> listDrivers = driverRepository.findAll();
 
-        if (listDrivers.isEmpty()) {
+        List<Driver> drivers = driverRepository.findAll();
+
+        if (drivers.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Driver item : listDrivers) {
+
+        for (Driver item : drivers) {
             item.setAdministrator(null);
             item.setGroup(null);
             item.setTravels(null);
         }
-        return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
+
+        return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
     }
 
     @GetMapping("/drivers/info/{id}")
     public ResponseEntity<Driver> getDriverInfoById(@PathVariable("id") Long id) {
+
         Driver foundDriver = driverRepository.findById(id).get();
 
         if (foundDriver == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         foundDriver.setAdministrator(null);
         foundDriver.setGroup(null);
         foundDriver.setTravels(null);
@@ -118,16 +123,15 @@ public class DriverController {
         return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
     }
 
-    // Mostrar solo la información básica de los Travels realizados por cada Driver
     @GetMapping("/drivers/admin/{id}")
     public ResponseEntity<Administrator> getAdminByDriverId(@PathVariable("id") Long id) {
 
-        Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
-        Administrator admin = adminRepository.findById(idAdminOfDriver).get();
+        Administrator admin = driverRepository.findById(id).get().getAdministrator();
 
         if (admin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         admin.setGroups(null);
         admin.setDrivers(null);
         admin.setTravels(null);
@@ -136,15 +140,15 @@ public class DriverController {
         return new ResponseEntity<Administrator>(admin, HttpStatus.OK);
     }
 
-    // Mostrar solo la información básica de los Travels realizados por cada Driver
     @GetMapping("/drivers/group/{id}")
     public ResponseEntity<Group> getGroupByDriverId(@PathVariable("id") Long id) {
-        Long idAdminOfDriver = driverRepository.findById(id).get().getAdministrator().getId();
-        Group group = groupRepository.findById(idAdminOfDriver).get();
+
+        Group group = driverRepository.findById(id).get().getGroup();
 
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         group.setAdministrator(null);
         group.setDrivers(null);
 

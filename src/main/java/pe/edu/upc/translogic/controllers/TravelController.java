@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,16 +32,16 @@ public class TravelController {
     @Autowired
     private TravelRepository travelRepository;
 
-    // Travels - All Information
     @GetMapping("/travels")
     public ResponseEntity<List<Travel>> getAllTravels() {
+
         List<Travel> travels = travelRepository.findAll();
 
         if (travels.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         for (Travel item : travels) {
-            // Administrator
             item.getAdministrator().setGroups(null);
             item.getAdministrator().setDrivers(null);
             item.getAdministrator().setTravels(null);
@@ -60,20 +61,129 @@ public class TravelController {
         return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
     }
 
-    // Travels - Individual Information
+    @GetMapping("/travels/{id}")
+    public ResponseEntity<Travel> getTravelById(@PathVariable("id") Long id) {
+
+        Travel foundTravel = travelRepository.findById(id).get();
+
+        if (foundTravel == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundTravel.getAdministrator().setGroups(null);
+        foundTravel.getAdministrator().setDrivers(null);
+        foundTravel.getAdministrator().setTravels(null);
+        foundTravel.getAdministrator().setRoutes(null);
+
+        foundTravel.getDriver().setAdministrator(null);
+        foundTravel.getDriver().setGroup(null);
+        foundTravel.getDriver().setTravels(null);
+
+        foundTravel.getVehicle().setTravels(null);
+
+        foundTravel.getRoute().setAdministrator(null);
+        foundTravel.getRoute().setTravels(null);
+        foundTravel.getRoute().setRouteTramos(null);
+
+        return new ResponseEntity<Travel>(foundTravel, HttpStatus.OK);
+    }
+
     @GetMapping("/travels/info")
     public ResponseEntity<List<Travel>> getAllTravelsInfo() {
+
         List<Travel> travels = travelRepository.findAll();
 
         if (travels.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         for (Travel item : travels) {
             item.setAdministrator(null);
             item.setDriver(null);
             item.setRoute(null);
             item.setVehicle(null);
         }
+
         return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
+    }
+
+    @GetMapping("/travels/info/{id}")
+    public ResponseEntity<Travel> getTravelInfoById(@PathVariable("id") Long id) {
+
+        Travel foundTravel = travelRepository.findById(id).get();
+
+        if (foundTravel == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundTravel.setAdministrator(null);
+        foundTravel.setDriver(null);
+        foundTravel.setRoute(null);
+        foundTravel.setVehicle(null);
+
+        return new ResponseEntity<Travel>(foundTravel, HttpStatus.OK);
+    }
+
+    @GetMapping("/travels/admin/{id}")
+    public ResponseEntity<Administrator> getAdminByTravelId(@PathVariable("id") Long id) {
+
+        Administrator foundAdmin = travelRepository.findById(id).get().getAdministrator();
+
+        if (foundAdmin == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundAdmin.setGroups(null);
+        foundAdmin.setDrivers(null);
+        foundAdmin.setTravels(null);
+        foundAdmin.setRoutes(null);
+
+        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    }
+
+    @GetMapping("/travels/driver/{id}")
+    public ResponseEntity<Driver> getDriverByTravelId(@PathVariable("id") Long id) {
+
+        Driver foundDriver = travelRepository.findById(id).get().getDriver();
+
+        if (foundDriver == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundDriver.setAdministrator(null);
+        foundDriver.setGroup(null);
+        foundDriver.setTravels(null);
+
+        return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
+    }
+
+    @GetMapping("/travels/vehicle/{id}")
+    public ResponseEntity<Vehicle> getVehicleByTravelId(@PathVariable("id") Long id) {
+
+        Vehicle foundVehicle = travelRepository.findById(id).get().getVehicle();
+
+        if (foundVehicle == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundVehicle.setTravels(null);
+
+        return new ResponseEntity<Vehicle>(foundVehicle, HttpStatus.OK);
+    }
+
+    @GetMapping("/travels/route/{id}")
+    public ResponseEntity<Route> getRouteByTravelId(@PathVariable("id") Long id) {
+
+        Route foundRoute = travelRepository.findById(id).get().getRoute();
+
+        if (foundRoute == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        foundRoute.setAdministrator(null);
+        foundRoute.setTravels(null);
+        foundRoute.setRouteTramos(null);
+
+        return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
     }
 }
