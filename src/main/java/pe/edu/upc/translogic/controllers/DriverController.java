@@ -145,9 +145,10 @@ public class DriverController {
     }
 
     @GetMapping("/drivers/group/{id}")
-    public ResponseEntity<Group> getGroupByDriverId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Group>> getGroupByDriverId(@PathVariable("id") Long id) {
 
         Group group = driverRepository.findById(id).get().getGroup();
+        List<Group> groups = new ArrayList<>();
 
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -156,6 +157,8 @@ public class DriverController {
         group.setAdministrator(null);
         group.setDrivers(null);
 
-        return new ResponseEntity<Group>(group, HttpStatus.OK);
+        groups.add(group);
+
+        return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 }
