@@ -1,6 +1,9 @@
 package pe.edu.upc.translogic.controllers;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
 import pe.edu.upc.translogic.entities.Travel;
+import pe.edu.upc.translogic.exporters.AdministratorExcelExporter;
 import pe.edu.upc.translogic.entities.Route;
 import pe.edu.upc.translogic.entities.Tramo;
 import pe.edu.upc.translogic.repositories.AdministratorRepository;
@@ -31,6 +35,7 @@ public class AdministratorController {
     @Autowired
     private AdministratorRepository administratorRepository;
 
+    // USA04
     @GetMapping("/admins")
     public ResponseEntity<List<Administrator>> getAllAdmins() {
 
@@ -65,23 +70,6 @@ public class AdministratorController {
         return new ResponseEntity<List<Administrator>>(administrators, HttpStatus.OK);
     }
 
-    @GetMapping("/admins/info")
-    public ResponseEntity<List<Administrator>> getAllAdminsInfo() {
-
-        List<Administrator> administrators = administratorRepository.findAll();
-
-        if (administrators.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Administrator a : administrators) {
-            a.setGroups(null);
-            a.setDrivers(null);
-            a.setTravels(null);
-            a.setRoutes(null);
-        }
-        return new ResponseEntity<List<Administrator>>(administrators, HttpStatus.OK);
-    }
-
     @GetMapping("/admins/{id}")
     public ResponseEntity<Administrator> getAdminById(@PathVariable("id") Long id) {
 
@@ -112,6 +100,24 @@ public class AdministratorController {
         }
 
         return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+    }
+
+    // USA05
+    @GetMapping("/admins/info")
+    public ResponseEntity<List<Administrator>> getAllAdminsInfo() {
+
+        List<Administrator> administrators = administratorRepository.findAll();
+
+        if (administrators.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Administrator a : administrators) {
+            a.setGroups(null);
+            a.setDrivers(null);
+            a.setTravels(null);
+            a.setRoutes(null);
+        }
+        return new ResponseEntity<List<Administrator>>(administrators, HttpStatus.OK);
     }
 
     @GetMapping("/admins/info/{id}")
@@ -207,6 +213,7 @@ public class AdministratorController {
     // CREATE
     @PostMapping("/admins")
     public ResponseEntity<Administrator> addAdministrator(@RequestBody Administrator adminBody) {
+
         Administrator foundAdmin = administratorRepository.save(new Administrator(adminBody.getNames(),
                 adminBody.getSurnames(), adminBody.getEmail(), adminBody.getPhone(), adminBody.getNickname(),
                 adminBody.getPassword()));
@@ -257,5 +264,20 @@ public class AdministratorController {
     public ResponseEntity<List<Administrator>> deleteAdminById(@PathVariable("id") Long id) {
         administratorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // EXPORTS
+    @GetMapping("/admins/export/excel")
+    public void exportAdminToExcel(HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=admin_report";
+        response.setHeader(headerKey, headerValue);
+
+        List<Administrator> administrators = administratorRepository.findAll();
+
+        AdministratorExcelExporter excelExporter = new AdministratorExcelExporter(administrators);
+        excelExporter.export(response);
     }
 }
