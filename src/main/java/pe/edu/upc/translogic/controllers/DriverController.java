@@ -1,5 +1,6 @@
 package pe.edu.upc.translogic.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,20 +125,23 @@ public class DriverController {
     }
 
     @GetMapping("/drivers/admin/{id}")
-    public ResponseEntity<Administrator> getAdminByDriverId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Administrator>> getAdminByDriverId(@PathVariable("id") Long id) {
 
-        Administrator admin = driverRepository.findById(id).get().getAdministrator();
+        Administrator foundAdmin = driverRepository.findById(id).get().getAdministrator();
+        List<Administrator> admins = new ArrayList<>();
 
-        if (admin == null) {
+        if (foundAdmin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        admin.setGroups(null);
-        admin.setDrivers(null);
-        admin.setTravels(null);
-        admin.setRoutes(null);
+        foundAdmin.setGroups(null);
+        foundAdmin.setDrivers(null);
+        foundAdmin.setTravels(null);
+        foundAdmin.setRoutes(null);
 
-        return new ResponseEntity<Administrator>(admin, HttpStatus.OK);
+        admins.add(foundAdmin);
+
+        return new ResponseEntity<List<Administrator>>(admins, HttpStatus.OK);
     }
 
     @GetMapping("/drivers/group/{id}")

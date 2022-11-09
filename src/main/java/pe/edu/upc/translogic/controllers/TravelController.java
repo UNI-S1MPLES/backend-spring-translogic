@@ -1,5 +1,6 @@
 package pe.edu.upc.translogic.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,9 +126,10 @@ public class TravelController {
     }
 
     @GetMapping("/travels/admin/{id}")
-    public ResponseEntity<Administrator> getAdminByTravelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Administrator>> getAdminByTravelId(@PathVariable("id") Long id) {
 
         Administrator foundAdmin = travelRepository.findById(id).get().getAdministrator();
+        List<Administrator> admins = new ArrayList<>();
 
         if (foundAdmin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -138,7 +140,9 @@ public class TravelController {
         foundAdmin.setTravels(null);
         foundAdmin.setRoutes(null);
 
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+        admins.add(foundAdmin);
+
+        return new ResponseEntity<List<Administrator>>(admins, HttpStatus.OK);
     }
 
     @GetMapping("/travels/driver/{id}")

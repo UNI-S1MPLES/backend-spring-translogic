@@ -1,5 +1,6 @@
 package pe.edu.upc.translogic.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,9 +116,10 @@ public class GroupController {
     }
 
     @GetMapping("/groups/admin/{id}")
-    public ResponseEntity<Administrator> getAdminByGroupId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Administrator>> getAdminByGroupId(@PathVariable("id") Long id) {
 
         Administrator foundAdmin = groupRepository.findById(id).get().getAdministrator();
+        List<Administrator> admins = new ArrayList<>();
 
         if (foundAdmin == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -128,7 +130,9 @@ public class GroupController {
         foundAdmin.setTravels(null);
         foundAdmin.setRoutes(null);
 
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+        admins.add(foundAdmin);
+
+        return new ResponseEntity<List<Administrator>>(admins, HttpStatus.OK);
     }
 
     @GetMapping("/groups/drivers/{id}")

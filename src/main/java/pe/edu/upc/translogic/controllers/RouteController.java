@@ -99,16 +99,19 @@ public class RouteController {
     }
 
     @GetMapping("/routes/admin/{id}")
-    public ResponseEntity<Administrator> getAdminByRouteId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Administrator>> getAdminByRouteId(@PathVariable("id") Long id) {
 
         Administrator foundAdmin = routeRepository.findById(id).get().getAdministrator();
+        List<Administrator> admins = new ArrayList<>();
 
         foundAdmin.setGroups(null);
         foundAdmin.setDrivers(null);
         foundAdmin.setTravels(null);
         foundAdmin.setRoutes(null);
 
-        return new ResponseEntity<Administrator>(foundAdmin, HttpStatus.OK);
+        admins.add(foundAdmin);
+
+        return new ResponseEntity<List<Administrator>>(admins, HttpStatus.OK);
     }
 
     @GetMapping("/routes/tramos/{id}")
