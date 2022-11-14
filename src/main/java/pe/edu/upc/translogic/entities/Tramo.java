@@ -19,9 +19,6 @@ public class Tramo {
 
     private String description;
 
-    @OneToMany(mappedBy = "tramo")
-    private List<RouteTramo> routeTramos;
-
     public Tramo(String description) {
         this.description = description;
     }

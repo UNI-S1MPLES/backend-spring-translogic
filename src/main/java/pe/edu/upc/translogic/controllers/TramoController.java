@@ -81,8 +81,6 @@ public class TramoController {
  
          Tramo foundTramo = tramoRepository.save(new Tramo(tramoBody.getDescription()));
  
-         foundTramo.setRouteTramos(null);
- 
          return new ResponseEntity<Tramo>(foundTramo, HttpStatus.CREATED);
      }
  
@@ -95,9 +93,6 @@ public class TramoController {
          if (tramoGroup.getDescription() != null)
          foundTramo.setDescription(tramoGroup.getDescription());
          
-         if (tramoGroup.getRouteTramos() != null)
-         foundTramo.setRouteTramos(tramoGroup.getRouteTramos());
-     
          tramoRepository.save(foundTramo);
  
          return new ResponseEntity<Tramo>(foundTramo, HttpStatus.OK);

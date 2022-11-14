@@ -151,10 +151,10 @@ public class TravelController {
     }
 
     @GetMapping("/travels/driver/{id}")
-    public ResponseEntity<Driver> getDriverByTravelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Driver>> getDriverByTravelId(@PathVariable("id") Long id) {
 
         Driver foundDriver = travelRepository.findById(id).get().getDriver();
-
+        List<Driver> drivers = new ArrayList<>();
         if (foundDriver == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -163,28 +163,29 @@ public class TravelController {
         foundDriver.setGroup(null);
         foundDriver.setTravels(null);
 
-        return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
+        drivers.add(foundDriver);
+        return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
     }
 
     @GetMapping("/travels/vehicle/{id}")
-    public ResponseEntity<Vehicle> getVehicleByTravelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Vehicle>> getVehicleByTravelId(@PathVariable("id") Long id) {
 
         Vehicle foundVehicle = travelRepository.findById(id).get().getVehicle();
-
+        List<Vehicle> vehicles = new ArrayList<>();
         if (foundVehicle == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         foundVehicle.setTravels(null);
-
-        return new ResponseEntity<Vehicle>(foundVehicle, HttpStatus.OK);
+        vehicles.add(foundVehicle);
+        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
     }
 
     @GetMapping("/travels/route/{id}")
-    public ResponseEntity<Route> getRouteByTravelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Route>> getRouteByTravelId(@PathVariable("id") Long id) {
 
         Route foundRoute = travelRepository.findById(id).get().getRoute();
-
+        List<Route> routes = new ArrayList<>();
         if (foundRoute == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -193,7 +194,9 @@ public class TravelController {
         foundRoute.setTravels(null);
         foundRoute.setRouteTramos(null);
 
-        return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
+        routes.add(foundRoute);
+
+        return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);
     }
 
     //CREATE
