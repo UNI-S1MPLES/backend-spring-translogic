@@ -8,9 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -189,5 +194,59 @@ public class TravelController {
         foundRoute.setRouteTramos(null);
 
         return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
+    }
+
+    //CREATE
+    @PostMapping("/travel")
+    public ResponseEntity<Travel> addTravel(@RequestBody Travel travelBody) {
+
+        Travel foundTravel = travelRepository.save(new Travel(travelBody.getDateOfStart(), travelBody.getDateOfEnd(), travelBody.getDuration(),travelBody.getState()));
+
+        foundTravel.setAdministrator(null);
+        foundTravel.setDriver(null);
+        foundTravel.setVehicle(null);
+        foundTravel.setRoute(null);
+
+        return new ResponseEntity<Travel>(foundTravel, HttpStatus.CREATED);
+    }
+
+    // UPDATE
+    @PutMapping("/travels/{id}")
+    public ResponseEntity<Travel> updateTravelById(@PathVariable("id") Long id,
+            @RequestBody Travel travelGroup) {
+        Travel foundTravel = travelRepository.findById(id).get();
+
+        if (travelGroup.getDateOfStart() != null)
+        foundTravel.setDateOfStart(travelGroup.getDateOfStart());
+        
+        if (travelGroup.getDateOfEnd() != null)
+        foundTravel.setDateOfEnd(travelGroup.getDateOfEnd());
+        
+        if (travelGroup.getDuration() != 0)
+        foundTravel.setDuration(travelGroup.getDuration());
+        
+        if (travelGroup.getState() != null)
+        foundTravel.setState(travelGroup.getState());
+        
+
+        if (travelGroup.getAdministrator() != null)
+        foundTravel.setAdministrator(travelGroup.getAdministrator());
+        if (travelGroup.getDriver() != null)
+        foundTravel.setDriver(travelGroup.getDriver());
+        if (travelGroup.getVehicle() != null)
+        foundTravel.setVehicle(travelGroup.getVehicle());
+        if (travelGroup.getRoute() != null)
+        foundTravel.setRoute(travelGroup.getRoute());
+
+        travelRepository.save(foundTravel);
+
+        return new ResponseEntity<Travel>(foundTravel, HttpStatus.OK);
+    }
+
+    // DELETE
+    @DeleteMapping("/travels/{id}")
+    public ResponseEntity<List<Travel>> deleteTravelById(@PathVariable("id") Long id) {
+        travelRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

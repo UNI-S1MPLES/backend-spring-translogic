@@ -9,9 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -152,5 +157,43 @@ public class GroupController {
         }
 
         return new ResponseEntity<List<Driver>>(drivers, HttpStatus.OK);
+    }
+
+    //CREATE
+    @PostMapping("/groups")
+    public ResponseEntity<Group> addGroup(@RequestBody Group groupBody) {
+
+        Group foundGroup = groupRepository.save(new Group(groupBody.getSector()));
+
+        foundGroup.setAdministrator(null);
+        foundGroup.setDrivers(null);
+
+        return new ResponseEntity<Group>(foundGroup, HttpStatus.CREATED);
+    }
+
+    // UPDATE
+    @PutMapping("/groups/{id}")
+    public ResponseEntity<Group> updateGroupById(@PathVariable("id") Long id,
+            @RequestBody Group bodyGroup) {
+        Group foundGroup = groupRepository.findById(id).get();
+
+        if (bodyGroup.getSector() != null)
+        foundGroup.setSector(bodyGroup.getSector());
+        
+        if (bodyGroup.getAdministrator() != null)
+        foundGroup.setAdministrator(bodyGroup.getAdministrator());
+        if (bodyGroup.getDrivers() != null)
+        foundGroup.setDrivers(bodyGroup.getDrivers());
+    
+        groupRepository.save(foundGroup);
+
+        return new ResponseEntity<Group>(foundGroup, HttpStatus.OK);
+    }
+
+    // DELETE
+    @DeleteMapping("/groups/{id}")
+    public ResponseEntity<List<Group>> deleteGroupById(@PathVariable("id") Long id) {
+        groupRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

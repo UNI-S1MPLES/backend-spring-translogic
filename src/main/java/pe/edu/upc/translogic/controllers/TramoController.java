@@ -8,9 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -69,4 +74,39 @@ public class TramoController {
 
         return new ResponseEntity<List<Route>>(listRoutes, HttpStatus.OK);
     }
+
+     //CREATE
+     @PostMapping("/tramo")
+     public ResponseEntity<Tramo> addTramo(@RequestBody Tramo tramoBody) {
+ 
+         Tramo foundTramo = tramoRepository.save(new Tramo(tramoBody.getDescription()));
+ 
+         foundTramo.setRouteTramos(null);
+ 
+         return new ResponseEntity<Tramo>(foundTramo, HttpStatus.CREATED);
+     }
+ 
+     // UPDATE
+     @PutMapping("/tramos/{id}")
+     public ResponseEntity<Tramo> updateTramoById(@PathVariable("id") Long id,
+             @RequestBody Tramo tramoGroup) {
+         Tramo foundTramo = tramoRepository.findById(id).get();
+ 
+         if (tramoGroup.getDescription() != null)
+         foundTramo.setDescription(tramoGroup.getDescription());
+         
+         if (tramoGroup.getRouteTramos() != null)
+         foundTramo.setRouteTramos(tramoGroup.getRouteTramos());
+     
+         tramoRepository.save(foundTramo);
+ 
+         return new ResponseEntity<Tramo>(foundTramo, HttpStatus.OK);
+     }
+ 
+     // DELETE
+     @DeleteMapping("/tramos/{id}")
+     public ResponseEntity<List<Tramo>> deleteTramoById(@PathVariable("id") Long id) {
+         tramoRepository.deleteById(id);
+         return new ResponseEntity<>(HttpStatus.OK);
+     }
 }

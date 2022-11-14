@@ -8,9 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -125,5 +130,45 @@ public class RouteController {
         }
 
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
+    }
+
+    //CREATE
+    @PostMapping("/routes")
+    public ResponseEntity<Route> addRoute(@RequestBody Route routeBody) {
+
+        Route foundRoute = routeRepository.save(new Route(routeBody.getStartPlace(), routeBody.getEndPlace()));
+
+        foundRoute.setAdministrator(null);
+        foundRoute.setRouteTramos(null);
+
+        return new ResponseEntity<Route>(foundRoute, HttpStatus.CREATED);
+    }
+
+    // UPDATE
+    @PutMapping("/routes/{id}")
+    public ResponseEntity<Route> updateRouteById(@PathVariable("id") Long id,
+            @RequestBody Route routeGroup) {
+        Route foundRoute = routeRepository.findById(id).get();
+
+        if (routeGroup.getStartPlace() != null)
+        foundRoute.setStartPlace(routeGroup.getStartPlace());
+        if (routeGroup.getEndPlace() != null)
+        foundRoute.setEndPlace(routeGroup.getEndPlace());
+
+        if (routeGroup.getAdministrator() != null)
+        foundRoute.setAdministrator(routeGroup.getAdministrator());
+        if (routeGroup.getRouteTramos() != null)
+        foundRoute.setRouteTramos(routeGroup.getRouteTramos());
+    
+        routeRepository.save(foundRoute);
+
+        return new ResponseEntity<Route>(foundRoute, HttpStatus.OK);
+    }
+
+    // DELETE
+    @DeleteMapping("/routes/{id}")
+    public ResponseEntity<List<Route>> deleteRouteById(@PathVariable("id") Long id) {
+        routeRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

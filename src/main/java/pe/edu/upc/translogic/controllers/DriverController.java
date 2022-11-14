@@ -9,10 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import pe.edu.upc.translogic.entities.Administrator;
 import pe.edu.upc.translogic.entities.Group;
 import pe.edu.upc.translogic.entities.Driver;
@@ -160,5 +164,52 @@ public class DriverController {
         groups.add(group);
 
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+    }
+
+    //CREATE
+    @PostMapping("/drivers")
+    public ResponseEntity<Driver> addDriver(@RequestBody Driver driverBody) {
+
+        Driver foundDriver = driverRepository.save(new Driver(driverBody.getNames(),
+        driverBody.getSurnames(), driverBody.getDateOfJoin(), driverBody.getDateOfBirthday(), driverBody.getState()));
+
+        foundDriver.setAdministrator(null);
+        foundDriver.setGroup(null);
+
+        return new ResponseEntity<Driver>(foundDriver, HttpStatus.CREATED);
+    }
+
+    // UPDATE
+    @PutMapping("/drivers/{id}")
+    public ResponseEntity<Driver> updateDriverById(@PathVariable("id") Long id,
+            @RequestBody Driver bodyDriver) {
+        Driver foundDriver = driverRepository.findById(id).get();
+
+        if (bodyDriver.getNames() != null)
+        foundDriver.setNames(bodyDriver.getNames());
+        if (bodyDriver.getSurnames() != null)
+        foundDriver.setSurnames(foundDriver.getSurnames());
+        if (bodyDriver.getDateOfJoin() != null)
+        foundDriver.setDateOfJoin(bodyDriver.getDateOfJoin());
+        if (bodyDriver.getDateOfBirthday() != null)
+        foundDriver.setDateOfBirthday(bodyDriver.getDateOfBirthday());
+        if (bodyDriver.getState() != null)
+            foundDriver.setState(bodyDriver.getState());
+
+        if (bodyDriver.getAdministrator() != null)
+        foundDriver.setAdministrator(foundDriver.getAdministrator());
+        if (bodyDriver.getGroup() != null)
+        foundDriver.setGroup(foundDriver.getGroup());
+    
+        driverRepository.save(foundDriver);
+
+        return new ResponseEntity<Driver>(foundDriver, HttpStatus.OK);
+    }
+
+    // DELETE
+    @DeleteMapping("/drivers/{id}")
+    public ResponseEntity<List<Driver>> deleteDriverById(@PathVariable("id") Long id) {
+        driverRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
