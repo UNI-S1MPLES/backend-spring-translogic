@@ -42,29 +42,29 @@ public class DriverController {
     @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers() {
 
-        List<Driver> listDrivers = driverRepository.findAll();
+        List<Driver> foundDriver = driverRepository.findAll();
 
-        if (listDrivers.isEmpty()) {
+        if (foundDriver == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Driver item : listDrivers) {
+        for (Driver item : foundDriver) {
+        item.getAdministrator().setGroups(null);
+        item.getAdministrator().setDrivers(null);
+        item.getAdministrator().setTravels(null);
+        item.getAdministrator().setRoutes(null);
 
-            item.getAdministrator().setGroups(null);
-            item.getAdministrator().setDrivers(null);
-            item.getAdministrator().setTravels(null);
-            item.getAdministrator().setRoutes(null);
-
-            item.getGroup().setAdministrator(null);
-            item.getGroup().setDrivers(null);
-
-            for (Travel travel : item.getTravels()) {
-                travel.setAdministrator(null);
-                travel.setDriver(null);
-                travel.setRoute(null);
-                travel.setVehicle(null);
-            }
+        item.getGroup().setAdministrator(null);
+        item.getGroup().setDrivers(null);
+        for (Travel travel : item.getTravels()) {
+            travel.setAdministrator(null);
+            travel.setDriver(null);
+            travel.setRoute(null);
+            travel.setVehicle(null);
         }
-        return new ResponseEntity<List<Driver>>(listDrivers, HttpStatus.OK);
+        }
+
+
+        return new ResponseEntity<List<Driver>>(foundDriver, HttpStatus.OK);
     }
 
     @GetMapping("/drivers/{id}")
@@ -169,12 +169,18 @@ public class DriverController {
     //CREATE
     @PostMapping("/drivers")
     public ResponseEntity<Driver> addDriver(@RequestBody Driver driverBody) {
-
         Driver foundDriver = driverRepository.save(new Driver(driverBody.getNames(),
-        driverBody.getSurnames(), driverBody.getDateOfJoin(), driverBody.getDateOfBirthday(), driverBody.getState()));
+        driverBody.getSurnames(), driverBody.getDateOfJoin(), driverBody.getDateOfBirthday(), driverBody.getState(),driverBody.getAdministrator(), driverBody.getGroup() ));
+        
+        foundDriver.setAdministrator( new Administrator(driverBody.getAdministrator().getNames(),
+        driverBody.getAdministrator().getSurnames(), driverBody.getAdministrator().getEmail(),
+        driverBody.getAdministrator().getPhone(),driverBody.getAdministrator().getNickname(),
+        driverBody.getAdministrator().getPassword()));
 
-        foundDriver.setAdministrator(null);
-        foundDriver.setGroup(null);
+        foundDriver.setGroup(new Group(driverBody.getGroup().getSector(),
+        driverBody.getGroup().getAdministrator()));
+
+        foundDriver.setTravels(null);
 
         return new ResponseEntity<Driver>(foundDriver, HttpStatus.CREATED);
     }

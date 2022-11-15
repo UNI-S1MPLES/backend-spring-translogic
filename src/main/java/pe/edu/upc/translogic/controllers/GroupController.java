@@ -47,20 +47,18 @@ public class GroupController {
         if (groups.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         for (Group item : groups) {
-
-            item.getAdministrator().setGroups(null);
-            item.getAdministrator().setDrivers(null);
-            item.getAdministrator().setTravels(null);
-            item.getAdministrator().setRoutes(null);
-
             for (Driver driver : item.getDrivers()) {
                 driver.setAdministrator(null);
                 driver.setGroup(null);
                 driver.setTravels(null);
             }
+            item.getAdministrator().setTravels(null);
+            item.getAdministrator().setRoutes(null);
+            item.getAdministrator().setDrivers(null);
+            item.getAdministrator().setGroups(null);
         }
+
 
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
@@ -163,9 +161,13 @@ public class GroupController {
     @PostMapping("/groups")
     public ResponseEntity<Group> addGroup(@RequestBody Group groupBody) {
 
-        Group foundGroup = groupRepository.save(new Group(groupBody.getSector()));
+        Group foundGroup = groupRepository.save(new Group(groupBody.getSector(),groupBody.getAdministrator()));
 
-        foundGroup.setAdministrator(null);
+        foundGroup.setAdministrator(new Administrator(groupBody.getAdministrator().getNames(),
+        groupBody.getAdministrator().getSurnames(),groupBody.getAdministrator().getEmail(),
+        groupBody.getAdministrator().getPhone(),groupBody.getAdministrator().getNickname(),
+        groupBody.getAdministrator().getPassword()));
+
         foundGroup.setDrivers(null);
 
         return new ResponseEntity<Group>(foundGroup, HttpStatus.CREATED);
@@ -182,9 +184,7 @@ public class GroupController {
         
         if (bodyGroup.getAdministrator() != null)
         foundGroup.setAdministrator(bodyGroup.getAdministrator());
-        if (bodyGroup.getDrivers() != null)
-        foundGroup.setDrivers(bodyGroup.getDrivers());
-    
+
         groupRepository.save(foundGroup);
 
         return new ResponseEntity<Group>(foundGroup, HttpStatus.OK);

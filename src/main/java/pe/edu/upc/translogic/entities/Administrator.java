@@ -44,4 +44,5 @@ public class Administrator {
         this.nickname = nickname;
         this.password = password;
     }
+
 }

@@ -45,17 +45,17 @@ public class TranslogicApplication {
 				Administrator admin1 = new Administrator("Brian Kaoru", "Uceda Hirata", "brian.uceda@gmail.com",
 						924227432, "Kiridepapel", "Pass111");
 
-				Group group1 = new Group("North");
-				Driver driver1 = new Driver("Fabrizio Augusto", "Venegas Tamayo", date, date, "Active");
-				Route route1 = new Route("Lima", "Trujillo");
-				Route route2 = new Route("Lima", "Narnia");
-				Route route3 = new Route("Trujillo", "Game Of Thrones");
+				Group group1 = new Group("North", admin1);
+				Driver driver1 = new Driver("Fabrizio Augusto", "Venegas Tamayo", date, date, "Active", admin1,group1);
+				Route route1 = new Route("Lima", "Trujillo",admin1);
+				Route route2 = new Route("Lima", "Narnia",admin1);
+				Route route3 = new Route("Trujillo", "Game Of Thrones",admin1);
 				Tramo tramo1 = new Tramo("Lima");
 				Tramo tramo2 = new Tramo("Lambayeque");
 				Tramo tramo3 = new Tramo("La Libertad");
 				Tramo tramo4 = new Tramo("Narnia");
 				Vehicle vehicle1 = new Vehicle(20);
-				Travel travel1 = new Travel(date, date, 16, "In progress");
+				Travel travel1 = new Travel(date, date, 16, "In progress",admin1,driver1,route1,vehicle1);
 
 				// Admin
 				administratorRepository.save(admin1);
@@ -67,11 +67,11 @@ public class TranslogicApplication {
 				tramoRepository.save(tramo4); // SAVE IN REPO
 
 				// Route
-				route1.setAdministrator(admin1); // Set Admin
+				//route1.setAdministrator(admin1); // Set Admin
 				routeRepository.save(route1); // SAVE
-				route2.setAdministrator(admin1); // Set Admin
+				//route2.setAdministrator(admin1); // Set Admin
 				routeRepository.save(route2); // SAVE
-				route3.setAdministrator(admin1); // Set Admin
+				//route3.setAdministrator(admin1); // Set Admin
 				routeRepository.save(route3); // SAVE
 
 				routeTramoRepository.save(new RouteTramo(route1, tramo1)); // Set tramo1 of Route
@@ -86,22 +86,22 @@ public class TranslogicApplication {
 				vehicleRepository.save(vehicle1);
 
 				// Group
-				group1.setAdministrator(admin1); // Set Admin
+				//group1.setAdministrator(admin1); // Set Admin
 				groupRepository.save(group1);
 
 				// Driver
-				driver1.setAdministrator(admin1); // Set Admin
-				driver1.setGroup(group1);
+				//driver1.setAdministrator(admin1); // Set Admin
+				//driver1.setGroup(group1);
 				driverRepository.save(driver1); // SAVE
 
 				// Travel
-				travel1.setAdministrator(admin1); // Set Admin
-				travel1.setDriver(driver1);
-				travel1.setVehicle(vehicle1);
-				travel1.setRoute(route1);
+				//travel1.setAdministrator(admin1); // Set Admin
+				//travel1.setDriver(driver1);
+			    //travel1.setVehicle(vehicle1);
+				//travel1.setRoute(route1);
 				travelRepository.save(travel1); // SAVE
 
-				travel1.setRoute(route3);
+				//travel1.setRoute(route3);
 				travelRepository.save(travel1); // SAVE
 			}
 		};

@@ -30,8 +30,9 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<RouteTramo> routeTramos;
 
-    public Route(String startPlace, String endPlace) {
+    public Route(String startPlace, String endPlace, Administrator administrator) {
         this.startPlace = startPlace;
         this.endPlace = endPlace;
+        this.administrator=administrator;
     }
 }

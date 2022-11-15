@@ -41,6 +41,8 @@ public class RouteController {
     private RouteRepository routeRepository;
     @Autowired
     private RouteTramoRepository routeTramoRepository;
+    @Autowired
+    private TramoRepository tramoRepository;
 
     @GetMapping("/routes")
     public ResponseEntity<List<Route>> getAllRoutes() {
@@ -136,10 +138,20 @@ public class RouteController {
     @PostMapping("/routes")
     public ResponseEntity<Route> addRoute(@RequestBody Route routeBody) {
 
-        Route foundRoute = routeRepository.save(new Route(routeBody.getStartPlace(), routeBody.getEndPlace()));
+        Route foundRoute = routeRepository.save(new Route(routeBody.getStartPlace(), routeBody.getEndPlace(),routeBody.getAdministrator()));
+        foundRoute.setAdministrator(new Administrator(routeBody.getAdministrator().getNames(),
+        routeBody.getAdministrator().getSurnames(),routeBody.getAdministrator().getEmail(),
+        routeBody.getAdministrator().getPhone(),routeBody.getAdministrator().getNickname(),
+        routeBody.getAdministrator().getPassword()));
 
-        foundRoute.setAdministrator(null);
         foundRoute.setRouteTramos(null);
+        foundRoute.setTravels(null);
+
+        List<RouteTramo> listRouteTramos = new ArrayList<>();
+
+        for (RouteTramo item : routeTramoRepository.findAll()) {
+            listRouteTramos.save(new RouteTramo(item.getTramo(),item.getRoute()));
+        }
 
         return new ResponseEntity<Route>(foundRoute, HttpStatus.CREATED);
     }
@@ -157,8 +169,6 @@ public class RouteController {
 
         if (routeGroup.getAdministrator() != null)
         foundRoute.setAdministrator(routeGroup.getAdministrator());
-        if (routeGroup.getRouteTramos() != null)
-        foundRoute.setRouteTramos(routeGroup.getRouteTramos());
     
         routeRepository.save(foundRoute);
 

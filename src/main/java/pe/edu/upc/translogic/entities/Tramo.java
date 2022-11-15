@@ -16,8 +16,9 @@ public class Tramo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String description;
+    @OneToMany(mappedBy = "tramo")
+    private List<RouteTramo> routeTramos;
 
     public Tramo(String description) {
         this.description = description;

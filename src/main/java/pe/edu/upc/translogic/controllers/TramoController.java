@@ -80,7 +80,7 @@ public class TramoController {
      public ResponseEntity<Tramo> addTramo(@RequestBody Tramo tramoBody) {
  
          Tramo foundTramo = tramoRepository.save(new Tramo(tramoBody.getDescription()));
- 
+         foundTramo.setRouteTramos(null);
          return new ResponseEntity<Tramo>(foundTramo, HttpStatus.CREATED);
      }
  

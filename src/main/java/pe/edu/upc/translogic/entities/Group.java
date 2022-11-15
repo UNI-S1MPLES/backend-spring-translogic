@@ -26,7 +26,8 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Driver> drivers;
 
-    public Group(String sector) {
+    public Group(String sector, Administrator administrator) {
         this.sector = sector;
+        this.administrator=administrator;
     }
 }

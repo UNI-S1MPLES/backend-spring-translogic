@@ -203,12 +203,25 @@ public class TravelController {
     @PostMapping("/travel")
     public ResponseEntity<Travel> addTravel(@RequestBody Travel travelBody) {
 
-        Travel foundTravel = travelRepository.save(new Travel(travelBody.getDateOfStart(), travelBody.getDateOfEnd(), travelBody.getDuration(),travelBody.getState()));
+        Travel foundTravel = travelRepository.save(new Travel(travelBody.getDateOfStart(), travelBody.getDateOfEnd(), travelBody.getDuration(),travelBody.getState(), travelBody.getAdministrator(), travelBody.getDriver(),travelBody.getRoute(),travelBody.getVehicle()));
 
-        foundTravel.setAdministrator(null);
-        foundTravel.setDriver(null);
-        foundTravel.setVehicle(null);
-        foundTravel.setRoute(null);
+        foundTravel.setAdministrator(new Administrator(travelBody.getAdministrator().getNames(),
+        travelBody.getAdministrator().getSurnames(),travelBody.getAdministrator().getEmail(),
+        travelBody.getAdministrator().getPhone(),travelBody.getAdministrator().getNickname(),
+        travelBody.getAdministrator().getPassword()));
+
+        foundTravel.setDriver(new Driver(travelBody.getDriver().getNames(),
+        travelBody.getDriver().getSurnames(),
+        travelBody.getDriver().getDateOfJoin(),
+        travelBody.getDriver().getDateOfBirthday(),
+        travelBody.getDriver().getState(), 
+        travelBody.getDriver().getAdministrator(),
+        travelBody.getDriver().getGroup()));
+
+        foundTravel.setVehicle(new Vehicle(travelBody.getVehicle().getKmTravelled()));
+        
+        foundTravel.setRoute(new Route(travelBody.getRoute().getStartPlace(),
+        travelBody.getRoute().getEndPlace(),travelBody.getRoute().getAdministrator()));
 
         return new ResponseEntity<Travel>(foundTravel, HttpStatus.CREATED);
     }

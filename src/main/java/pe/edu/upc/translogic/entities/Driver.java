@@ -35,11 +35,13 @@ public class Driver {
     @OneToMany(mappedBy = "driver")
     private List<Travel> travels;
 
-    public Driver(String names, String surnames, Date dateOfJoin, Date dateOfBirthday, String state) {
+    public Driver(String names, String surnames, Date dateOfJoin, Date dateOfBirthday, String state, Administrator administrator, Group group) {
         this.names = names;
         this.surnames = surnames;
         this.dateOfJoin = dateOfJoin;
         this.dateOfBirthday = dateOfBirthday;
         this.state = state;
+        this.administrator=administrator;
+        this.group=group;
     }
 }

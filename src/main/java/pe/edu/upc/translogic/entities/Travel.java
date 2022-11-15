@@ -38,10 +38,14 @@ public class Travel {
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    public Travel(Date dateOfStart, Date dateOfEnd, int duration, String state) {
+    public Travel(Date dateOfStart, Date dateOfEnd, int duration, String state, Administrator administrator, Driver driver, Route route, Vehicle vehicle) {
         this.dateOfStart = dateOfStart;
         this.dateOfEnd = dateOfEnd;
         this.duration = duration;
         this.state = state;
+        this.administrator = administrator;
+        this.driver = driver;
+        this.route = route;
+        this.vehicle = vehicle;
     }
 }
