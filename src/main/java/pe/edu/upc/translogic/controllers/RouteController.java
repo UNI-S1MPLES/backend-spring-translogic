@@ -149,9 +149,9 @@ public class RouteController {
 
         List<RouteTramo> listRouteTramos = new ArrayList<>();
 
-        for (RouteTramo item : routeTramoRepository.findAll()) {
-            listRouteTramos.save(new RouteTramo(item.getTramo(),item.getRoute()));
-        }
+        // for (RouteTramo item : routeTramoRepository.findAll()) {
+        //     listRouteTramos.save(new RouteTramo(item.getTramo(),item.getRoute()));
+        // }
 
         return new ResponseEntity<Route>(foundRoute, HttpStatus.CREATED);
     }
