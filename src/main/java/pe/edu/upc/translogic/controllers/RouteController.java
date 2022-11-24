@@ -124,14 +124,16 @@ public class RouteController {
     @GetMapping("/routes/tramos/{id}")
     public ResponseEntity<List<Tramo>> getAllTramosByRouteId(@PathVariable("id") Long id) {
 
-        List<Tramo> listTramos = new ArrayList<>();
+        List<Tramo> listTramo = new ArrayList<>();
 
         for (RouteTramo item : routeTramoRepository.findAll()) {
-            if (item.getRoute().getId() == id)
-                listTramos.add(item.getTramo());
+            if (item.getRoute().getId() == id) {
+                item.getTramo().setRouteTramos(null);
+                listTramo.add(item.getTramo());
+            }
         }
 
-        return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
+        return new ResponseEntity<List<Tramo>>(listTramo, HttpStatus.OK);
     }
 
     //CREATE

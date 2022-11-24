@@ -199,8 +199,9 @@ public class TravelController {
         return new ResponseEntity<List<Route>>(routes, HttpStatus.OK);
     }
 
+    
     //CREATE
-    @PostMapping("/travel")
+    @PostMapping("/travels")
     public ResponseEntity<Travel> addTravel(@RequestBody Travel travelBody) {
 
         Travel foundTravel = travelRepository.save(new Travel(travelBody.getDateOfStart(), travelBody.getDateOfEnd(), travelBody.getDuration(),travelBody.getState(), travelBody.getAdministrator(), travelBody.getDriver(),travelBody.getRoute(),travelBody.getVehicle()));
@@ -218,10 +219,12 @@ public class TravelController {
         travelBody.getDriver().getAdministrator(),
         travelBody.getDriver().getGroup()));
 
-        foundTravel.setVehicle(new Vehicle(travelBody.getVehicle().getKmTravelled()));
-        
         foundTravel.setRoute(new Route(travelBody.getRoute().getStartPlace(),
         travelBody.getRoute().getEndPlace(),travelBody.getRoute().getAdministrator()));
+
+        
+        foundTravel.setVehicle(new Vehicle(travelBody.getVehicle().getKmTravelled()));
+        
 
         return new ResponseEntity<Travel>(foundTravel, HttpStatus.CREATED);
     }

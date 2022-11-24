@@ -47,6 +47,9 @@ public class TramoController {
 
         List<Tramo> listTramos = tramoRepository.findAll();
 
+        for (Tramo item : listTramos) {
+            item.setRouteTramos(null);
+        }
         return new ResponseEntity<List<Tramo>>(listTramos, HttpStatus.OK);
     }
 
@@ -54,6 +57,7 @@ public class TramoController {
     public ResponseEntity<Tramo> getTramoById(@PathVariable("id") Long id) {
 
         Tramo foundTramo = tramoRepository.findById(id).get();
+        foundTramo.setRouteTramos(null);
 
         return new ResponseEntity<Tramo>(foundTramo, HttpStatus.OK);
     }
@@ -76,7 +80,7 @@ public class TramoController {
     }
 
      //CREATE
-     @PostMapping("/tramo")
+     @PostMapping("/tramos")
      public ResponseEntity<Tramo> addTramo(@RequestBody Tramo tramoBody) {
  
          Tramo foundTramo = tramoRepository.save(new Tramo(tramoBody.getDescription()));

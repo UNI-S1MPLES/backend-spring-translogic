@@ -107,7 +107,7 @@ public class VehicleController {
     }
     
     //CREATE
-    @PostMapping("/vehicle")
+    @PostMapping("/vehicles")
     public ResponseEntity<Vehicle> addVehicle(@RequestBody Vehicle vehicleBody) {
 
         Vehicle foundVehicle = vehicleRepository.save(new Vehicle(vehicleBody.getKmTravelled()));

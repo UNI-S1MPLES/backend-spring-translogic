@@ -166,6 +166,21 @@ public class DriverController {
         return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
     }
 
+    @GetMapping("/drivers/travels/{id}")
+    public ResponseEntity<List<Travel>> getAllTravelsByVehicleId(@PathVariable("id") Long id) {
+
+        List<Travel> travels = driverRepository.findById(id).get().getTravels();
+
+        for (Travel item : travels) {
+            item.setAdministrator(null);
+            item.setDriver(null);
+            item.setVehicle(null);
+            item.setRoute(null);
+        }
+
+        return new ResponseEntity<List<Travel>>(travels, HttpStatus.OK);
+    }
+
     //CREATE
     @PostMapping("/drivers")
     public ResponseEntity<Driver> addDriver(@RequestBody Driver driverBody) {
