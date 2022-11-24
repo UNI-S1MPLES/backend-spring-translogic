@@ -45,7 +45,7 @@ public class TranslogicApplication {
 				Administrator admin1 = new Administrator("Brian Kaoru", "Uceda Hirata", "brian.uceda@gmail.com",
 						924227432, "Kiridepapel", "Pass111");
 
-				Group group1 = new Group("North", admin1);
+				Group group1 = new Group("Norte", admin1);
 				Driver driver1 = new Driver("Fabrizio Augusto", "Venegas Tamayo", date, date, "Active", admin1,group1);
 				Route route1 = new Route("Lima", "Trujillo",admin1);
 				Route route2 = new Route("Lima", "Narnia",admin1);
